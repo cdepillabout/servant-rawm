@@ -18,6 +18,6 @@ module Servant.RawM.Internal
   ) where
 
 import Servant.RawM.Internal.API as X
--- import Servant.RawM.Internal.Client ()
+import Servant.RawM.Internal.Client ()
 -- import Servant.RawM.Internal.Docs ()
 import Servant.RawM.Internal.Server as X
