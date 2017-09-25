@@ -23,17 +23,19 @@ module Servant.RawM.Internal.Server where
 
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Trans.Resource (runResourceT)
+import Data.ByteString (ByteString)
 import Data.Proxy (Proxy(Proxy))
 import Network.Wai
        (Application, Request, Response, ResponseReceived)
 import Network.Wai.Application.Static
-       (defaultWebAppSettings, staticApp)
-import Servant (Context, HasServer(route), ServerT, runHandler)
-import qualified Servant as Servant
+       (StaticSettings, defaultFileServerSettings, defaultWebAppSettings,
+        embeddedSettings, staticApp, webAppSettingsWithLookup)
+import Servant (Context, HasServer(route), Handler, ServerT, runHandler)
 import Servant.Server.Internal
        (Delayed, Router'(RawRouter), RouteResult(Fail, FailFatal, Route), responseServantErr,
         runDelayed)
--- import System.FilePath (addTrailingPathSeparator)
+import System.FilePath (addTrailingPathSeparator)
+import WaiAppStatic.Storage.Filesystem (ETagLookup)
 
 import Servant.RawM.Internal.API (RawM)
 
@@ -43,7 +45,7 @@ instance HasServer RawM context where
     :: forall env.
        Proxy RawM
     -> Context context
-    -> Delayed env (Servant.Handler Application)
+    -> Delayed env (Handler Application)
     -> Router' env (Request -> (RouteResult Response -> IO ResponseReceived) -> IO ResponseReceived)
   route Proxy _ rawApplication = RawRouter go
     where
@@ -64,3 +66,49 @@ instance HasServer RawM context where
                 case eitherApp of
                   Left err -> respond . Route $ responseServantErr err
                   Right app -> app request (respond . Route)
+
+
+-- | Serve anything under the specified directory as a 'Raw' endpoint.
+--
+-- @
+-- type MyApi = "static" :> Raw
+--
+-- server :: Server MyApi
+-- server = serveDirectoryWebApp "\/var\/www"
+-- @
+--
+-- would capture any request to @\/static\/\<something>@ and look for
+-- @\<something>@ under @\/var\/www@.
+--
+-- It will do its best to guess the MIME type for that file, based on the extension,
+-- and send an appropriate /Content-Type/ header if possible.
+--
+-- If your goal is to serve HTML, CSS and Javascript files that use the rest of the API
+-- as a webapp backend, you will most likely not want the static files to be hidden
+-- behind a /\/static\// prefix. In that case, remember to put the 'serveDirectoryWebApp'
+-- handler in the last position, because /servant/ will try to match the handlers
+-- in order.
+--
+-- Corresponds to the `defaultWebAppSettings` `StaticSettings` value.
+serveDirectoryWebApp :: Applicative m => FilePath -> ServerT RawM m
+serveDirectoryWebApp = serveDirectoryWith . defaultWebAppSettings . addTrailingPathSeparator
+
+-- | Same as 'serveDirectoryWebApp', but uses `defaultFileServerSettings`.
+serveDirectoryFileServer :: Applicative m => FilePath -> ServerT RawM m
+serveDirectoryFileServer = serveDirectoryWith . defaultFileServerSettings . addTrailingPathSeparator
+
+-- | Same as 'serveDirectoryWebApp', but uses 'webAppSettingsWithLookup'.
+serveDirectoryWebAppLookup :: Applicative m => ETagLookup -> FilePath -> ServerT RawM m
+serveDirectoryWebAppLookup etag =
+  serveDirectoryWith . flip webAppSettingsWithLookup etag . addTrailingPathSeparator
+
+-- | Uses 'embeddedSettings'.
+serveDirectoryEmbedded :: Applicative m => [(FilePath, ByteString)] -> ServerT RawM m
+serveDirectoryEmbedded files = serveDirectoryWith (embeddedSettings files)
+
+-- | Alias for 'staticApp'. Lets you serve a directory
+--   with arbitrary 'StaticSettings'. Useful when you want
+--   particular settings not covered by the four other
+--   variants. This is the most flexible method.
+serveDirectoryWith :: Applicative m => StaticSettings -> ServerT RawM m
+serveDirectoryWith = pure . staticApp

@@ -28,6 +28,8 @@ library
                      -- , Servant.RawM.Internal.Docs
                      , Servant.RawM.Internal.Server
   build-depends:       base >= 4.8 && < 5
+                     , bytestring >= 0.10
+                     , filepath >= 1.4
                      , resourcet >= 1.0
                      , servant >= 0.9
                      , servant-client >= 0.9

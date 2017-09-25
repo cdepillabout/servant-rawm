@@ -11,7 +11,7 @@ import Network.Wai.Handler.Warp (run)
 import Servant (Handler, (:<|>)((:<|>)), Server, ServerT, serve)
 import Servant.Utils.Enter ((:~>)(NT), enter)
 
-import Servant.RawM
+import Servant.RawM (serveDirectoryWebApp)
 
 import Api (Api, port)
 
@@ -35,7 +35,9 @@ getOtherEndpoint2 = do
   pure int2
 
 rawEndpoint :: ReaderT Config IO Application
-rawEndpoint = undefined
+rawEndpoint = do
+  (Config _ _ dir) <- ask
+  serveDirectoryWebApp dir
 
 app :: Config -> Application
 app conf = serve (Proxy :: Proxy Api) apiServer
@@ -50,7 +52,7 @@ app conf = serve (Proxy :: Proxy Api) apiServer
     transformation readerT = liftIO $ runReaderT readerT conf
 
 config :: Config
-config = Config {configInt1 = 3, configInt2 = 4, configDir = "./images/"}
+config = Config {configInt1 = 3, configInt2 = 4, configDir = "./example/files"}
 
 -- | Run the WAI 'Application' using 'run' on the port defined by 'port'.
 main :: IO ()
