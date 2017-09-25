@@ -21,6 +21,9 @@ data Config = Config
   , configDir :: FilePath
   } deriving Show
 
+config :: Config
+config = Config {configInt1 = 3, configInt2 = 4, configDir = "./example/files"}
+
 serverRoot :: ServerT Api (ReaderT Config IO)
 serverRoot = getOtherEndpoint1 :<|> rawEndpoint :<|> getOtherEndpoint2
 
@@ -50,9 +53,6 @@ app conf = serve (Proxy :: Proxy Api) apiServer
 
     transformation :: ReaderT Config IO a -> Handler a
     transformation readerT = liftIO $ runReaderT readerT conf
-
-config :: Config
-config = Config {configInt1 = 3, configInt2 = 4, configDir = "./example/files"}
 
 -- | Run the WAI 'Application' using 'run' on the port defined by 'port'.
 main :: IO ()
