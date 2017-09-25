@@ -25,7 +25,7 @@ library
                      , Servant.RawM.Internal
                      , Servant.RawM.Internal.API
                      , Servant.RawM.Internal.Client
-                     -- , Servant.RawM.Internal.Docs
+                     , Servant.RawM.Internal.Docs
                      , Servant.RawM.Internal.Server
   build-depends:       base >= 4.8 && < 5
                      , bytestring >= 0.10

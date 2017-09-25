@@ -16,7 +16,8 @@ Maintainer  :  Dennis Gosnell (cdep.illabout@gmail.com)
 Stability   :  experimental
 Portability :  unknown
 
-This module exports 'HasServer' instances for 'Throws' and 'Throwing'.
+This module exports 'HasServer' instances for 'RawM', as well as some helper
+functions for serving directories of files.
 -}
 
 module Servant.RawM.Internal.Server where
@@ -68,12 +69,12 @@ instance HasServer RawM context where
                   Right app -> app request (respond . Route)
 
 
--- | Serve anything under the specified directory as a 'Raw' endpoint.
+-- | Serve anything under the specified directory as a 'RawM' endpoint.
 --
 -- @
--- type MyApi = "static" :> Raw
+-- type MyApi = "static" :> RawM
 --
--- server :: Server MyApi
+-- server :: ServerT MyApi m
 -- server = serveDirectoryWebApp "\/var\/www"
 -- @
 --
@@ -106,9 +107,8 @@ serveDirectoryWebAppLookup etag =
 serveDirectoryEmbedded :: Applicative m => [(FilePath, ByteString)] -> ServerT RawM m
 serveDirectoryEmbedded files = serveDirectoryWith (embeddedSettings files)
 
--- | Alias for 'staticApp'. Lets you serve a directory
---   with arbitrary 'StaticSettings'. Useful when you want
---   particular settings not covered by the four other
---   variants. This is the most flexible method.
+-- | Alias for 'staticApp'. Lets you serve a directory with arbitrary
+-- 'StaticSettings'. Useful when you want particular settings not covered by
+-- the four other variants. This is the most flexible method.
 serveDirectoryWith :: Applicative m => StaticSettings -> ServerT RawM m
 serveDirectoryWith = pure . staticApp

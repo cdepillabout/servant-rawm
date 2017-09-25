@@ -12,7 +12,7 @@ Maintainer  :  Dennis Gosnell (cdep.illabout@gmail.com)
 Stability   :  experimental
 Portability :  unknown
 
-This module only exports 'HasClient' instances for 'Throws' and 'Throwing'.
+This module only exports a 'HasClient' instance for 'RawM'.
 -}
 
 module Servant.RawM.Internal.Client where
