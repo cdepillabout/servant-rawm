@@ -28,7 +28,7 @@ import Servant.Common.Req (Req, performRequest)
 import Servant.RawM.Internal.API (RawM)
 
 instance HasClient RawM where
-  type Client RawM = Method -> ClientM (Int, ByteString, MediaType, [Header], Response ByteString)
+  type Client RawM = Method -> (Req -> Req) -> ClientM (Int, ByteString, MediaType, [Header], Response ByteString)
 
   clientWithRoute :: Proxy RawM -> Req -> Client RawM
-  clientWithRoute Proxy req method = performRequest method req
+  clientWithRoute Proxy req method f = performRequest method $ f req

@@ -29,15 +29,15 @@ getOtherEndpoint1 = do
   (Config int1 _ _) <- ask
   pure int1
 
-getOtherEndpoint2 :: ReaderT Config IO Int
-getOtherEndpoint2 = do
-  (Config _ int2 _) <- ask
-  pure int2
-
 rawEndpoint :: ReaderT Config IO Application
 rawEndpoint = do
   (Config _ _ dir) <- ask
   serveDirectoryWebApp dir
+
+getOtherEndpoint2 :: ReaderT Config IO Int
+getOtherEndpoint2 = do
+  (Config _ int2 _) <- ask
+  pure int2
 
 app :: Config -> Application
 app conf = serve (Proxy :: Proxy Api) apiServer

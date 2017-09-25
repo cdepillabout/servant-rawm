@@ -21,7 +21,7 @@ dump-th:
 	@find "$$(stack path --dist-dir)" -name "*.dump-splices" | sort
 
 example-client: build-example
-	stack exec -- servant-rawm-example-client --strict Hello
+	stack exec -- servant-rawm-example-client
 
 example-docs: build-example
 	stack exec -- servant-rawm-example-docs
