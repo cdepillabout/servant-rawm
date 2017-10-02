@@ -14,6 +14,8 @@ module Servant.RawM
   (
   -- * 'RawM' API parameter
     RawM
+  , RawM'
+  , FileServer
   -- * Helper functions for writing simple file servers
   , serveDirectoryWebApp
   , serveDirectoryFileServer

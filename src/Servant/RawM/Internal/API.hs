@@ -12,4 +12,8 @@ module Servant.RawM.Internal.API where
 
 import Data.Typeable (Typeable)
 
-data RawM deriving Typeable
+type RawM = RawM' FileServer
+
+data RawM' serverType deriving Typeable
+
+data FileServer deriving Typeable
