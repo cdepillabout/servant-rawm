@@ -60,9 +60,9 @@ matrix:
   #   compiler: ": #stack 8.0.1 (lts-7)"
   #   addons: {apt: {packages: [ghc-8.0.1,libgmp-dev], sources: [hvr-ghc]}}
 
-  - env: BUILD=stack ARGS="--resolver lts-8"
-    compiler: ": #stack 8.0.2 (lts-8)"
-    addons: {apt: {packages: [ghc-8.0.2,libgmp-dev], sources: [hvr-ghc]}}
+  # - env: BUILD=stack ARGS="--resolver lts-8"
+  #   compiler: ": #stack 8.0.2 (lts-8)"
+  #   addons: {apt: {packages: [ghc-8.0.2,libgmp-dev], sources: [hvr-ghc]}}
 
   - env: BUILD=stack ARGS="--resolver lts-9"
     compiler: ": #stack 8.0.2 (lts-9)"
@@ -82,9 +82,9 @@ matrix:
   #   compiler: ": #stack 8.0.1 (lts-7) osx"
   #   os: osx
 
-  - env: BUILD=stack ARGS="--resolver lts-8"
-    compiler: ": #stack 8.0.2 (lts-8) osx"
-    os: osx
+  # - env: BUILD=stack ARGS="--resolver lts-8"
+  #   compiler: ": #stack 8.0.2 (lts-8) osx"
+  #   os: osx
 
   - env: BUILD=stack ARGS="--resolver lts-9"
     compiler: ": #stack 8.0.2 (lts-9) osx"
@@ -144,7 +144,6 @@ install:
 
 script:
 - |
-  mkdir -p test/test-dir/empty-dir
   case "$BUILD" in
     stack)
       stack --no-terminal $ARGS test --haddock --no-haddock-deps --flag servant-rawm:buildexample
