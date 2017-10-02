@@ -16,7 +16,7 @@ Maintainer  :  Dennis Gosnell (cdep.illabout@gmail.com)
 Stability   :  experimental
 Portability :  unknown
 
-This module exports 'HasServer' instances for 'RawM', as well as some helper
+This module exports 'HasServer' instances for 'RawM'', as well as some helper
 functions for serving directories of files.
 -}
 
@@ -38,13 +38,13 @@ import Servant.Server.Internal
 import System.FilePath (addTrailingPathSeparator)
 import WaiAppStatic.Storage.Filesystem (ETagLookup)
 
-import Servant.RawM.Internal.API (RawM)
+import Servant.RawM.Internal.API (RawM')
 
-instance HasServer RawM context where
-  type ServerT RawM m = m Application
+instance HasServer (RawM' serverType) context where
+  type ServerT (RawM' serverType) m = m Application
   route
     :: forall env.
-       Proxy RawM
+       Proxy (RawM' serverType)
     -> Context context
     -> Delayed env (Handler Application)
     -> Router' env (Request -> (RouteResult Response -> IO ResponseReceived) -> IO ResponseReceived)
@@ -69,10 +69,10 @@ instance HasServer RawM context where
                   Right app -> app request (respond . Route)
 
 
--- | Serve anything under the specified directory as a 'RawM' endpoint.
+-- | Serve anything under the specified directory as a 'RawM'' endpoint.
 --
 -- @
--- type MyApi = "static" :> RawM
+-- type MyApi = "static" :> RawM'
 --
 -- server :: ServerT MyApi m
 -- server = serveDirectoryWebApp "\/var\/www"
@@ -91,24 +91,24 @@ instance HasServer RawM context where
 -- in order.
 --
 -- Corresponds to the `defaultWebAppSettings` `StaticSettings` value.
-serveDirectoryWebApp :: Applicative m => FilePath -> ServerT RawM m
+serveDirectoryWebApp :: Applicative m => FilePath -> ServerT (RawM' serverType) m
 serveDirectoryWebApp = serveDirectoryWith . defaultWebAppSettings . addTrailingPathSeparator
 
 -- | Same as 'serveDirectoryWebApp', but uses `defaultFileServerSettings`.
-serveDirectoryFileServer :: Applicative m => FilePath -> ServerT RawM m
+serveDirectoryFileServer :: Applicative m => FilePath -> ServerT (RawM' serverType) m
 serveDirectoryFileServer = serveDirectoryWith . defaultFileServerSettings . addTrailingPathSeparator
 
 -- | Same as 'serveDirectoryWebApp', but uses 'webAppSettingsWithLookup'.
-serveDirectoryWebAppLookup :: Applicative m => ETagLookup -> FilePath -> ServerT RawM m
+serveDirectoryWebAppLookup :: Applicative m => ETagLookup -> FilePath -> ServerT (RawM' serverType) m
 serveDirectoryWebAppLookup etag =
   serveDirectoryWith . flip webAppSettingsWithLookup etag . addTrailingPathSeparator
 
 -- | Uses 'embeddedSettings'.
-serveDirectoryEmbedded :: Applicative m => [(FilePath, ByteString)] -> ServerT RawM m
+serveDirectoryEmbedded :: Applicative m => [(FilePath, ByteString)] -> ServerT (RawM' serverType) m
 serveDirectoryEmbedded files = serveDirectoryWith (embeddedSettings files)
 
 -- | Alias for 'staticApp'. Lets you serve a directory with arbitrary
 -- 'StaticSettings'. Useful when you want particular settings not covered by
 -- the four other variants. This is the most flexible method.
-serveDirectoryWith :: Applicative m => StaticSettings -> ServerT RawM m
+serveDirectoryWith :: Applicative m => StaticSettings -> ServerT (RawM' serverType) m
 serveDirectoryWith = pure . staticApp
