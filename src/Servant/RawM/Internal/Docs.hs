@@ -19,7 +19,7 @@ This module exports a 'HasDocs' instance for 'RawM'.
 
 module Servant.RawM.Internal.Docs where
 
-import Control.Lens ((.~), (%~), (<>~))
+import Control.Lens ((.~), (<>~))
 import Data.Function ((&))
 import Data.Proxy (Proxy(Proxy))
 import Data.Semigroup ((<>))
@@ -32,8 +32,6 @@ import Servant.Docs
 -- import Servant.Docs.Internal (apiEndpoints, respBody, response)
 
 import Servant.RawM.Internal.API (FileServer, RawM')
-
-import Debug.Trace
 
 instance (HasDocs serverType) => HasDocs (RawM' serverType) where
   docsFor :: Proxy (RawM' serverType) -> (Endpoint, Action) -> DocOptions -> API
@@ -89,4 +87,4 @@ instance HasDocs FileServer where
             & captures <>~ [capture]
             & notes <>~ [note]
             & response .~ resp
-    in traceShow action $ single newEndpoint newAction
+    in single newEndpoint newAction
