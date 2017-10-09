@@ -29,7 +29,6 @@ import Servant.Docs
        (Action, API, DocCapture(DocCapture), DocNote(DocNote), DocOptions,
         Endpoint, HasDocs(docsFor), captures, defResponse, method, notes,
         path, respBody, respStatus, respTypes, response, single)
--- import Servant.Docs.Internal (apiEndpoints, respBody, response)
 
 import Servant.RawM.Internal.API (FileServer, RawM')
 

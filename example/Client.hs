@@ -14,7 +14,6 @@ import Servant.Client
        (BaseUrl(BaseUrl), ClientEnv(ClientEnv), ClientM, Scheme(Http),
         client, runClientM)
 import Servant.Common.Req (Req, appendToPath)
-
 import Servant.RawM ()
 
 import Api (Api, port)

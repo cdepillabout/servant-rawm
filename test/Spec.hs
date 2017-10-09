@@ -5,19 +5,38 @@
 
 module Main where
 
+import Control.Concurrent
+       (ThreadId, forkIO, killThread, threadDelay)
 import Control.Exception (Exception, SomeException, catch)
+import Control.Monad.IO.Class (liftIO)
+import Control.Monad.Trans.Reader (ReaderT, ask, runReaderT)
+import Data.ByteString.Lazy (ByteString)
+import Data.Either (isLeft)
+import Data.Monoid ((<>))
 import Data.Proxy (Proxy(Proxy))
 import Data.Type.Equality ((:~:)(Refl))
 import Data.Typeable (Typeable)
+import Network.HTTP.Client
+       (Response, defaultManagerSettings, newManager, responseBody)
+import Network.HTTP.Media (MediaType)
+import Network.HTTP.Types (Header, Method, methodGet)
 import Network.Wai (Application)
-import Servant ((:<|>)((:<|>)), (:>), Capture, Get, Handler, JSON, ServerT, serve)
-import Test.Hspec.Wai (get, shouldRespondWith, with)
+import Network.Wai.Handler.Warp (run)
+import Servant
+       ((:<|>)((:<|>)), (:>), (:~>)(NT), Capture, Get, Handler, JSON,
+        ServerT, enter, serve)
+import Servant.Client
+       (BaseUrl(BaseUrl), Client, ClientEnv(ClientEnv), ClientM,
+        Scheme(Http), client, runClientM)
+import Servant.Common.BaseUrl (parseBaseUrl)
+import Servant.Common.Req (Req, appendToPath)
+import Test.Hspec.Wai (WaiExpectation, get, shouldRespondWith, with)
 import Test.Tasty (TestTree, defaultMain, testGroup)
-import Test.Tasty.Hspec (describe, it, testSpec)
+import Test.Tasty.Hspec
+       (afterAll, beforeAll, describe, it, shouldBe, testSpec)
 import Test.Tasty.HUnit ((@?=), assertFailure, testCase)
 
-import Servant.Checked.Exceptions
-       (Envelope, NoThrow, Throws, pureErrEnvelope, pureSuccEnvelope)
+import Servant.RawM (RawM, serveDirectoryWebApp)
 
 main :: IO ()
 main = do
@@ -26,11 +45,13 @@ main = do
 
 testsIO :: IO TestTree
 testsIO = do
+  clientTests <- clientTestsIO
   serverTests <- serverTestsIO
   pure $
     testGroup
       "tests"
-      [ hasServerInstanceTests
+      [ instanceTests
+      , clientTests
       , serverTests
       ]
 
@@ -67,99 +88,93 @@ infix 1 @!
 -- HasServer instance tests --
 ------------------------------
 
-type ApiThrows = Throws String :> Get '[JSON] Int
+checkRawMServer :: ServerT RawM m :~: m Application
+checkRawMServer = Refl
 
-checkApiThrows :: ServerT ApiThrows m :~: m (Envelope '[String] Int)
-checkApiThrows = Refl
+checkRawMClient
+  :: Client RawM :~:
+     ( Method ->
+       (Req -> Req) ->
+       ClientM (Int, ByteString, MediaType, [Header], Response ByteString)
+     )
+checkRawMClient = Refl
 
-type ApiDoubleThrows = Throws String :> Throws Double :> Get '[JSON] Int
-
-checkApiDoubleThrows
-  :: ServerT ApiDoubleThrows m :~: m (Envelope '[String, Double] Int)
-checkApiDoubleThrows = Refl
-
-type ApiThrowsBeforeCapture =
-  Throws String :> Capture "foobar" Double :> Get '[JSON] Int
-
-checkApiThrowsBeforeCapture
-  :: ServerT ApiThrowsBeforeCapture m :~: (Double -> m (Envelope '[String] Int))
-checkApiThrowsBeforeCapture = Refl
-
-type ApiThrowsBeforeMulti =
-  Throws String :> (Get '[JSON] Int :<|> Get '[JSON] Double)
-
-checkApiThrowsBeforeMulti
-  :: ServerT ApiThrowsBeforeMulti m :~:
-     (m (Envelope '[String] Int) :<|> m (Envelope '[String] Double))
-checkApiThrowsBeforeMulti = Refl
-
-type ApiNoThrow = NoThrow :> Get '[JSON] Int
-
-checkApiNoThrows :: ServerT ApiNoThrow m :~: m (Envelope '[] Int)
-checkApiNoThrows = Refl
-
-type ApiNoThrowBeforeCapture =
-  NoThrow :> Capture "foobar" Double :> Get '[JSON] Int
-
-checkApiNoThrowBeforeCapture
-  :: ServerT ApiNoThrowBeforeCapture m :~: (Double -> m (Envelope '[] Int))
-checkApiNoThrowBeforeCapture = Refl
-
-type ApiNoThrowBeforeMulti =
-  NoThrow :> (Get '[JSON] Int :<|> Get '[JSON] Double)
-
-checkApiNoThrowBeforeMulti
-  :: ServerT ApiNoThrowBeforeMulti m :~:
-     (m (Envelope '[] Int) :<|> m (Envelope '[] Double))
-checkApiNoThrowBeforeMulti = Refl
-
-hasServerInstanceTests :: TestTree
-hasServerInstanceTests =
+instanceTests :: TestTree
+instanceTests =
   testGroup
-    "HasServer instances"
-    [ testCase "single Throws" $ checkApiThrows @?= Refl
-    , testCase "double Throws" $ checkApiDoubleThrows @?= Refl
-    , testCase "Throws before Capture" $ checkApiThrowsBeforeCapture @?= Refl
-    , testCase "Throws before (:<|>)" $ checkApiThrowsBeforeMulti @?= Refl
-    , testCase "single NoThrows" $ checkApiNoThrows @?= Refl
-    , testCase "NoThrow before Capture" $ checkApiNoThrowBeforeCapture @?= Refl
-    , testCase "NoThrow before (:<|>)" $ checkApiNoThrowBeforeMulti @?= Refl
+    "instances"
+    [ testCase "HasServer" $ checkRawMServer @?= Refl
+    , testCase "HasClient" $ checkRawMClient @?= Refl
     ]
 
-------------------
--- Server tests --
-------------------
+--------------------------------
+-- Real Server Tests (Server) --
+--------------------------------
 
-type TestThrows = Capture "foobar" Double :> Throws Int :> Get '[JSON] String
+type Api = "test" :> RawM
 
-type TestNoThrow = Capture "baz" Integer :> NoThrow :> Get '[JSON] String
+server :: ServerT Api (ReaderT FilePath IO)
+server = fileServer
 
-type TestApi = TestThrows :<|> TestNoThrow
-
-server :: ServerT TestApi Handler
-server = testThrowsGet :<|> testNoThrowsGet
-
-testThrowsGet :: Double -> Handler (Envelope '[Int] String)
-testThrowsGet double =
-  if double < 0
-    then pureErrEnvelope (0 :: Int)
-    else pureSuccEnvelope "success"
-
-testNoThrowsGet :: Integer -> Handler (Envelope '[] String)
-testNoThrowsGet _ = pureSuccEnvelope "success"
+fileServer :: ReaderT FilePath IO Application
+fileServer = do
+  path <- ask
+  serveDirectoryWebApp path
 
 app :: Application
-app = serve (Proxy :: Proxy TestApi) server
+app = serve (Proxy :: Proxy Api) $ enter (NT trans) server
+  where
+    trans :: ReaderT FilePath IO a -> Handler a
+    trans readerT = liftIO $ runReaderT readerT "example/files"
 
 serverTestsIO :: IO TestTree
-serverTestsIO =
+serverTestsIO = do
+  manager <- newManager defaultManagerSettings
+  baseUrl <- parseBaseUrl "http://localhost/"
+  let clientEnv = ClientEnv manager baseUrl
   testSpec "server" $
     with (pure app) $ do
-      describe "Throws" $ do
-        it "handler can return error envelope" $
-          get "/-5" `shouldRespondWith` "{\"err\":0}"
-        it "handler can return success envelope" $
-          get "/10" `shouldRespondWith` "{\"data\":\"success\"}"
-      describe "NoThrow" $ do
-        it "handler can return success envelope" $
-          get "/10" `shouldRespondWith` "{\"data\":\"success\"}"
+      it "correctly serves files" $
+        get "/test/bar.txt" `shouldRespondWith` "This is bar.txt.\n"
+      it "returns 404 for non-existent files" $
+        get "/test/non-existent-file.txt" `shouldRespondWith` 404
+
+--------------------------------
+-- Real Server Tests (Client) --
+--------------------------------
+
+getFile'
+  :: Method
+  -> (Req -> Req)
+  -> ClientM (Int, ByteString, MediaType, [Header], Response ByteString)
+getFile' = client (Proxy :: Proxy Api)
+
+getFile :: String -> ClientM ByteString
+getFile filePath = do
+  (_, _, _, _, resp) <- getFile' methodGet $ \req -> appendToPath filePath req
+  pure $ responseBody resp
+
+clientTestsIO :: IO TestTree
+clientTestsIO = do
+  manager <- newManager defaultManagerSettings
+  baseUrl <- parseBaseUrl $ "http://localhost:" <> show port <> "/"
+  let clientEnv = ClientEnv manager baseUrl
+  testSpec "client" . beforeAll runServer . afterAll killServer $ do
+    it "correctly gets files" $ \_ -> do
+      eitherRes <- runClientM (getFile "bar.txt") clientEnv
+      eitherRes `shouldBe` Right "This is bar.txt.\n"
+    it "returns ServantErr for non-existent files" $ \_ -> do
+      eitherRes <- runClientM (getFile "non-existent-file.txt") clientEnv
+      isLeft eitherRes `shouldBe` True
+
+runServer :: IO ThreadId
+runServer = do
+  threadId <- forkIO (run port app)
+  threadDelay $ 250 * 1000
+  pure threadId
+
+killServer :: ThreadId -> IO ()
+killServer = killThread
+
+port :: Int
+port = 51135

@@ -12,6 +12,7 @@ category:            Text
 build-type:          Simple
 extra-source-files:  CHANGELOG.md
                    , README.md
+                   , example/files/foo.txt
                    , stack.yaml
 cabal-version:       >=1.10
 
@@ -105,33 +106,39 @@ executable servant-rawm-example-server
   else
     buildable:         False
 
--- test-suite servant-rawm-doctest
---   type:                exitcode-stdio-1.0
---   main-is:             DocTest.hs
---   hs-source-dirs:      test
---   build-depends:       base
---                      , doctest
---                      , Glob
---   default-language:    Haskell2010
---   ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+test-suite servant-rawm-doctest
+  type:                exitcode-stdio-1.0
+  main-is:             DocTest.hs
+  hs-source-dirs:      test
+  build-depends:       base
+                     , doctest
+                     , Glob
+  default-language:    Haskell2010
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
 
--- test-suite servant-rawm-test
---   type:                exitcode-stdio-1.0
---   main-is:             Spec.hs
---   other-modules:
---   hs-source-dirs:      test
---   build-depends:       base
---                      , bytestring
---                      , hspec-wai
---                      , tasty
---                      , tasty-hspec
---                      , tasty-hunit
---                      , servant
---                      , servant-rawm
---                      , servant-server
---                      , wai
---   default-language:    Haskell2010
---   ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N -fwarn-incomplete-uni-patterns -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction -Wmissing-import-lists
+test-suite servant-rawm-test
+  type:                exitcode-stdio-1.0
+  main-is:             Spec.hs
+  other-modules:
+  hs-source-dirs:      test
+  build-depends:       base
+                     , bytestring
+                     , hspec-wai
+                     , http-client
+                     , http-media
+                     , http-types
+                     , servant
+                     , servant-client
+                     , servant-rawm
+                     , servant-server
+                     , tasty
+                     , tasty-hspec
+                     , tasty-hunit
+                     , transformers
+                     , wai
+                     , warp
+  default-language:    Haskell2010
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N -fwarn-incomplete-uni-patterns -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction -Wmissing-import-lists
 
 source-repository head
   type:     git
