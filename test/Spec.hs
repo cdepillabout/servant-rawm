@@ -22,18 +22,14 @@ import Network.HTTP.Media (MediaType)
 import Network.HTTP.Types (Header, Method, methodGet)
 import Network.Wai (Application)
 import Network.Wai.Handler.Warp (run)
-import Servant
-       ((:<|>)((:<|>)), (:>), (:~>)(NT), Capture, Get, Handler, JSON,
-        ServerT, enter, serve)
+import Servant ((:>), (:~>)(NT), Handler, ServerT, enter, serve)
 import Servant.Client
-       (BaseUrl(BaseUrl), Client, ClientEnv(ClientEnv), ClientM,
-        Scheme(Http), client, runClientM)
+       (Client, ClientEnv(ClientEnv), ClientM, client, runClientM)
 import Servant.Common.BaseUrl (parseBaseUrl)
 import Servant.Common.Req (Req, appendToPath)
-import Test.Hspec.Wai (WaiExpectation, get, shouldRespondWith, with)
+import Test.Hspec.Wai (get, shouldRespondWith, with)
 import Test.Tasty (TestTree, defaultMain, testGroup)
-import Test.Tasty.Hspec
-       (afterAll, beforeAll, describe, it, shouldBe, testSpec)
+import Test.Tasty.Hspec (afterAll, beforeAll, it, shouldBe, testSpec)
 import Test.Tasty.HUnit ((@?=), assertFailure, testCase)
 
 import Servant.RawM (RawM, serveDirectoryWebApp)
@@ -128,10 +124,7 @@ app = serve (Proxy :: Proxy Api) $ enter (NT trans) server
     trans readerT = liftIO $ runReaderT readerT "example/files"
 
 serverTestsIO :: IO TestTree
-serverTestsIO = do
-  manager <- newManager defaultManagerSettings
-  baseUrl <- parseBaseUrl "http://localhost/"
-  let clientEnv = ClientEnv manager baseUrl
+serverTestsIO =
   testSpec "server" $
     with (pure app) $ do
       it "correctly serves files" $
