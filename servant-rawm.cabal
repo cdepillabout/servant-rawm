@@ -30,14 +30,12 @@ library
                      , Servant.RawM.Internal.Server
   build-depends:       base >= 4.8 && < 5
                      , bytestring >= 0.10
-                     , containers >= 0.5
                      , filepath >= 1.4
                      , http-client >= 0.5
                      , http-media >= 0.6
                      , http-types >= 0.9
                      , lens >= 4.0
                      , resourcet >= 1.0
-                     , servant >= 0.9
                      , servant-client >= 0.9
                      , servant-docs >= 0.9
                      , servant-server >= 0.9
