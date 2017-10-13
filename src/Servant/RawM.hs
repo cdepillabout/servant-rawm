@@ -8,7 +8,7 @@ License     :  BSD3
 
 Maintainer  :  Dennis Gosnell (cdep.illabout@gmail.com)
 
-This "Servant.RawM" module exposes a 'RawM' type that allows you to embed a WAI
+This module exposes a 'RawM' type that allows you to embed a WAI
 'Network.Wai.Application' in your Servant API.
 
 It is similar to 'Raw' provided by Servant, but there is one big difference.
@@ -38,7 +38,26 @@ What does this look like in practice?  The following is an example of using
 
       transformation :: 'Control.Monad.Reader.ReaderT' 'FilePath' 'IO' a -> 'Servant.Handler' a
       transformation readerT = 'Control.Monad.IO.Class.liftIO' $ 'Control.Monad.Reader.runReaderT' readerT filePath
+@
 
+Notice how the above @rawEndpoint@ handler is able to get the @filePath@ from
+the 'Control.Monad.Reader.ReaderT'. Using Servant's default 'Servant.Raw' type,
+@rawEndpoint@ would have to be written like the following:
+
+@
+  type Api\' = \"serve-directory-example\" :> 'RawM'
+
+  serverRoot\' :: 'Server.ServerT' Api ('Control.Monad.Reader.ReaderT' 'FilePath' 'IO')
+  serverRoot\' = rawEndpoint\'
+
+  rawEndpoint\' :: 'Data.Tagged.Tagged' ('Control.Monad.Reader.ReaderT' 'FilePath' 'IO') 'Network.Wai.Application'
+  rawEndpoint\' = ...
+@
+
+@rawEndpoint'@ does not have access to the 'Control.Monad.Reader.ReaderT' monad,
+so there is no way to get the directory path.
+
+'RawM' solves this problem.
 -}
 
 module Servant.RawM
