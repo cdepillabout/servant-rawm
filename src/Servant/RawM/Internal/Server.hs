@@ -40,6 +40,13 @@ import WaiAppStatic.Storage.Filesystem (ETagLookup)
 
 import Servant.RawM.Internal.API (RawM')
 
+-- | Creates a server instance like the following:
+--
+--
+-- >>> :set -XTypeOperators
+-- >>> import Data.Type.Equality ((:~:)(Refl))
+-- >>> Refl :: ServerT (RawM' a) m :~: m Application
+-- Refl
 instance HasServer (RawM' serverType) context where
   type ServerT (RawM' serverType) m = m Application
   route

@@ -27,6 +27,12 @@ import Servant.Common.Req (Req, performRequest)
 
 import Servant.RawM.Internal.API (RawM')
 
+-- | Creates a client route like the following:
+--
+-- >>> :set -XTypeOperators
+-- >>> import Data.Type.Equality ((:~:)(Refl))
+-- >>> Refl :: Client (RawM' a) :~: (Method -> (Req -> Req) -> ClientM (Int, ByteString, MediaType, [Header], Response ByteString))
+-- Refl
 instance HasClient (RawM' serverType) where
   type Client (RawM' serverType) =
         Method
