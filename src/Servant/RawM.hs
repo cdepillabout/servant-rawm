@@ -60,6 +60,11 @@ so there is no way to get the directory path.
 
 'RawM' solves this problem by allowing the 'Network.Wai.Application' to be
 produced monadically.
+
+There is an
+<https://github.com/cdepillabout/servant-rawm/tree/master/example example> in
+the source code repository that shows a more in-depth server, client, and
+documentation.
 -}
 
 module Servant.RawM

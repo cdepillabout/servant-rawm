@@ -33,6 +33,14 @@ import Servant.RawM.Internal.API (RawM')
 -- >>> import Data.Type.Equality ((:~:)(Refl))
 -- >>> Refl :: Client (RawM' a) :~: (Method -> (Req -> Req) -> ClientM (Int, ByteString, MediaType, [Header], Response ByteString))
 -- Refl
+--
+-- This allows modification of the underlying 'Req' to work for any sort of
+-- 'Network.Wai.Application'.
+--
+-- Check out the
+-- <https://github.com/cdepillabout/servant-rawm/tree/master/example example> in
+-- the source code repository that shows a more in-depth server, client, and
+-- documentation.
 instance HasClient (RawM' serverType) where
   type Client (RawM' serverType) =
         Method
