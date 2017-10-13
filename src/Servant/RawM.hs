@@ -11,8 +11,8 @@ Maintainer  :  Dennis Gosnell (cdep.illabout@gmail.com)
 This module exposes a 'RawM' type that allows you to embed a WAI
 'Network.Wai.Application' in your Servant API.
 
-It is similar to 'Raw' provided by Servant, but there is one big difference.
-'RawM' allows you to use monadic effects to create the
+It is similar to 'Servant.API.Raw.Raw' provided by Servant, but there is one big
+difference. 'RawM' allows you to use monadic effects to create the
 'Network.Wai.Application'.
 
 What does this look like in practice?  The following is an example of using
@@ -21,7 +21,7 @@ What does this look like in practice?  The following is an example of using
 @
   type Api = \"serve-directory-example\" :> 'RawM'
 
-  serverRoot :: 'Server.ServerT' Api ('Control.Monad.Reader.ReaderT' 'FilePath' 'IO')
+  serverRoot :: 'Servant.Server.ServerT' Api ('Control.Monad.Reader.ReaderT' 'FilePath' 'IO')
   serverRoot = rawEndpoint
 
   rawEndpoint :: 'Control.Monad.Reader.ReaderT' 'FilePath' 'IO' 'Network.Wai.Application'
@@ -31,18 +31,19 @@ What does this look like in practice?  The following is an example of using
 
   app :: FilePath -> 'Network.Wai.Application'
   app filePath =
-    'Servant.serve' ('Data.Proxy.Proxy' :: 'Data.Proxy.Proxy' Api) apiServer
+    'Servant.Server.serve' ('Data.Proxy.Proxy' :: 'Data.Proxy.Proxy' Api) apiServer
     where
       apiServer :: Server Api
-      apiServer = 'Servant.enter' ('Servant.NT' transformation) serverRoot
+      apiServer = 'Servant.Utils.Enter.enter' ('Servant.Utils.Enter.NT' transformation) serverRoot
 
-      transformation :: 'Control.Monad.Reader.ReaderT' 'FilePath' 'IO' a -> 'Servant.Handler' a
+      transformation :: 'Control.Monad.Reader.ReaderT' 'FilePath' 'IO' a -> 'Servant.Server.Handler' a
       transformation readerT = 'Control.Monad.IO.Class.liftIO' $ 'Control.Monad.Reader.runReaderT' readerT filePath
 @
 
 Notice how the above @rawEndpoint@ handler is able to get the @filePath@ from
-the 'Control.Monad.Reader.ReaderT'. Using Servant's default 'Servant.Raw' type,
-@rawEndpoint@ would have to be written like the following:
+the 'Control.Monad.Reader.ReaderT'. Using Servant's default
+'Servant.API.Raw.Raw' type, @rawEndpoint@ would have to be written like the
+following:
 
 @
   type Api\' = \"serve-directory-example\" :> 'RawM'
@@ -54,10 +55,11 @@ the 'Control.Monad.Reader.ReaderT'. Using Servant's default 'Servant.Raw' type,
   rawEndpoint\' = ...
 @
 
-@rawEndpoint'@ does not have access to the 'Control.Monad.Reader.ReaderT' monad,
+@rawEndpoint\'@ does not have access to the 'Control.Monad.Reader.ReaderT' monad,
 so there is no way to get the directory path.
 
-'RawM' solves this problem.
+'RawM' solves this problem by allowing the 'Network.Wai.Application' to be
+produced monadically.
 -}
 
 module Servant.RawM
