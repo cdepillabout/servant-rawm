@@ -14,10 +14,13 @@ Export all of the instances for the Client, Docs, and Server.
 -}
 
 module Servant.RawM.Internal
-  ( module X
+  ( module Servant.RawM.Internal.API
+  -- , module Servant.RawM.Internal.Client
+  -- , module Servant.RawM.Internal.Docs
+  , module Servant.RawM.Internal.Server
   ) where
 
-import Servant.RawM.Internal.API as X
+import Servant.RawM.Internal.API
 import Servant.RawM.Internal.Client ()
 import Servant.RawM.Internal.Docs ()
-import Servant.RawM.Internal.Server as X
+import Servant.RawM.Internal.Server

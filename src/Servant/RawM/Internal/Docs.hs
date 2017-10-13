@@ -32,11 +32,15 @@ import Servant.Docs
 
 import Servant.RawM.Internal.API (FileServer, RawM')
 
+-- | This just defers to the 'HasDocs' instance for the @serverType@ phantom
+-- type.
 instance (HasDocs serverType) => HasDocs (RawM' serverType) where
   docsFor :: Proxy (RawM' serverType) -> (Endpoint, Action) -> DocOptions -> API
   docsFor Proxy (endpoint, action) docOpts =
     docsFor (Proxy :: Proxy serverType) (endpoint, action) docOpts
 
+-- | This is a 'HasDocs' instance compatible with the file servers defined in
+-- "Servant.RawM.Internal.Server".
 instance HasDocs FileServer where
   docsFor :: Proxy FileServer -> (Endpoint, Action) -> DocOptions -> API
   docsFor Proxy (endpoint, action) _ =
