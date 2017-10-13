@@ -14,7 +14,7 @@ in a Servant handler. It is more convenient and powerful than the
 type provided by [`servant`](https://hackage.haskell.org/package/servant).
 
 See the
-[Haddocks on Hackage for `servant-rawm`](https://hackage.haskell.org/package/servant-rawm)
+[Haddocks on Hackage for `servant-rawm`](https://hackage.haskell.org/package/servant-rawm/docs/Servant-RawM.html)
 for an explanation of how to use the
 [`RawM`](https://hackage.haskell.org/package/servant-rawm/docs/Servant-RawM.html#t:RawM)
 type.
