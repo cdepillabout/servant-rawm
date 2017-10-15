@@ -46,7 +46,7 @@ the 'Control.Monad.Reader.ReaderT'. Using Servant's default
 following:
 
 @
-  type Api\' = \"serve-directory-example\" :> 'RawM'
+  type Api\' = \"serve-directory-example\" :> 'Raw'
 
   serverRoot\' :: 'Server.ServerT' Api ('Control.Monad.Reader.ReaderT' 'FilePath' 'IO')
   serverRoot\' = rawEndpoint\'
