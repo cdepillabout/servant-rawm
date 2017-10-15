@@ -1,4 +1,8 @@
 
+## 0.2.0.1
+
+*   Add tests and more documentation.
+
 ## 0.2.0.0
 
 *   (commit 30a2cd48488d) Add a phantom type to `RawM` to allow the user to
