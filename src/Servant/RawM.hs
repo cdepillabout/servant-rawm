@@ -48,7 +48,7 @@ following:
 @
   type Api\' = \"serve-directory-example\" :> 'Raw'
 
-  serverRoot\' :: 'Server.ServerT' Api ('Control.Monad.Reader.ReaderT' 'FilePath' 'IO')
+  serverRoot\' :: 'Server.ServerT' Api\' ('Control.Monad.Reader.ReaderT' 'FilePath' 'IO')
   serverRoot\' = rawEndpoint\'
 
   rawEndpoint\' :: 'Data.Tagged.Tagged' ('Control.Monad.Reader.ReaderT' 'FilePath' 'IO') 'Network.Wai.Application'
