@@ -13,7 +13,6 @@ clean:
 # dump the template haskell
 dump-splices: dump-th
 dump-th:
-	mkdir -p test/test-dir/empty-dir
 	-stack build --ghc-options="-ddump-splices"
 	@echo
 	@echo "Splice files:"
@@ -36,10 +35,7 @@ haddock:
 ghci:
 	stack ghci
 
-test/test-dir/empty-dir:
-	mkdir -p test/test-dir/empty-dir
-
-test: test/test-dir/empty-dir
+test:
 	stack test
 
 # Run hlint.
@@ -67,6 +63,6 @@ watch-example:
 watch-haddock:
 	stack build --haddock --file-watch --fast .
 
-watch-test: test/test-dir/empty-dir
+watch-test:
 	stack test --file-watch --fast .
 
