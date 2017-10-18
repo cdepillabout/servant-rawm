@@ -1,4 +1,8 @@
 
+## 0.2.0.2
+
+*   Add missing test file to extra-source-files in the cabal file.
+
 ## 0.2.0.1
 
 *   Add tests and more documentation.
