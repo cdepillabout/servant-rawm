@@ -1,5 +1,5 @@
 name:                servant-rawm
-version:             0.2.0.1
+version:             0.2.0.2
 synopsis:            Embed a raw 'Application' in a Servant API
 description:         Please see <https://github.com/cdepillabout/servant-rawm#readme README.md>.
 homepage:            https://github.com/cdepillabout/servant-rawm
@@ -12,6 +12,7 @@ category:            Text
 build-type:          Simple
 extra-source-files:  CHANGELOG.md
                    , README.md
+                   , example/files/bar.txt
                    , example/files/foo.txt
                    , stack.yaml
 cabal-version:       >=1.10
