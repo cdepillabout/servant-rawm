@@ -1,3 +1,5 @@
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
@@ -23,7 +25,7 @@ import Network.HTTP.Client (Response)
 import Network.HTTP.Media (MediaType)
 import Network.HTTP.Types (Header, Method)
 import Servant.Client (Client, ClientM, HasClient(clientWithRoute))
-import Servant.Common.Req (Req, performRequest)
+import Servant.Client.Core (RunClient, Request)
 
 import Servant.RawM.Internal.API (RawM')
 
@@ -31,21 +33,22 @@ import Servant.RawM.Internal.API (RawM')
 --
 -- >>> :set -XTypeOperators
 -- >>> import Data.Type.Equality ((:~:)(Refl))
--- >>> Refl :: Client (RawM' a) :~: (Method -> (Req -> Req) -> ClientM (Int, ByteString, MediaType, [Header], Response ByteString))
+-- >>> Refl :: Client (RawM' a) :~: (Method -> (Request -> Request) -> ClientM (Int, ByteString, MediaType, [Header], Response ByteString))
 -- Refl
 --
--- This allows modification of the underlying 'Req' to work for any sort of
+-- This allows modification of the underlying 'Request' to work for any sort of
 -- 'Network.Wai.Application'.
 --
 -- Check out the
 -- <https://github.com/cdepillabout/servant-rawm/tree/master/example example> in
 -- the source code repository that shows a more in-depth server, client, and
 -- documentation.
-instance HasClient (RawM' serverType) where
-  type Client (RawM' serverType) =
+instance RunClient m => HasClient m (RawM' serverType) where
+  type Client m (RawM' serverType) =
         Method
-    -> (Req -> Req)
+    -> (Request -> Request)
     -> ClientM (Int, ByteString, MediaType, [Header], Response ByteString)
 
-  clientWithRoute :: Proxy (RawM' serverType) -> Req -> Client (RawM' serverType)
-  clientWithRoute Proxy req method f = performRequest method $ f req
+  clientWithRoute = undefined
+  -- clientWithRoute :: Proxy (RawM' serverType) -> Request -> Client m (RawM' serverType)
+  -- clientWithRoute Proxy req method f = performRequest method $ f req
