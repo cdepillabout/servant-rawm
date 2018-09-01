@@ -31,7 +31,7 @@ import Network.Wai
 import Network.Wai.Application.Static
        (StaticSettings, defaultFileServerSettings, defaultWebAppSettings,
         embeddedSettings, staticApp, webAppSettingsWithLookup)
-import Servant (Context, HasServer(route), Handler, ServerT, runHandler)
+import Servant (Context, HasServer(route, hoistServerWithContext), Handler, ServerT, runHandler)
 import Servant.Server.Internal
        (Delayed, Router'(RawRouter), RouteResult(Fail, FailFatal, Route), responseServantErr,
         runDelayed)
@@ -74,7 +74,13 @@ instance HasServer (RawM' serverType) context where
                 case eitherApp of
                   Left err -> respond . Route $ responseServantErr err
                   Right app -> app request (respond . Route)
-
+  hoistServerWithContext
+    :: Proxy (RawM' serverType)
+      -> Proxy context
+      -> (forall x. m x -> n x)
+      -> m Application
+      -> n Application
+  hoistServerWithContext Proxy Proxy f m = f m
 
 -- | Serve anything under the specified directory as a 'RawM'' endpoint.
 --
