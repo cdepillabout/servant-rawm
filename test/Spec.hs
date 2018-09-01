@@ -14,19 +14,17 @@ import Data.ByteString.Lazy (ByteString)
 import Data.Either (isLeft)
 import Data.Monoid ((<>))
 import Data.Proxy (Proxy(Proxy))
+import Data.Text (Text)
 import Data.Type.Equality ((:~:)(Refl))
 import Data.Typeable (Typeable)
-import Network.HTTP.Client
-       (Response, defaultManagerSettings, newManager, responseBody)
-import Network.HTTP.Media (MediaType)
-import Network.HTTP.Types (Header, Method, methodGet)
+import Network.HTTP.Client (defaultManagerSettings, newManager)
+import Network.HTTP.Types (methodGet)
 import Network.Wai (Application)
 import Network.Wai.Handler.Warp (run)
-import Servant ((:>), (:~>)(NT), Handler, ServerT, enter, serve)
+import Servant ((:>), Handler, ServerT, hoistServer, serve)
 import Servant.Client
-       (Client, ClientEnv(ClientEnv), ClientM, client, runClientM)
-import Servant.Common.BaseUrl (parseBaseUrl)
-import Servant.Common.Req (Req, appendToPath)
+       (Client, ClientM, Response, client, mkClientEnv, parseBaseUrl, responseBody, runClientM)
+import Servant.Client.Core (Request, appendToPath, requestMethod)
 import Test.Hspec.Wai (get, shouldRespondWith, with)
 import Test.Tasty (TestTree, defaultMain, testGroup)
 import Test.Tasty.Hspec (afterAll, beforeAll, it, shouldBe, testSpec)
@@ -88,11 +86,7 @@ checkRawMServer :: ServerT RawM m :~: m Application
 checkRawMServer = Refl
 
 checkRawMClient
-  :: Client RawM :~:
-     ( Method ->
-       (Req -> Req) ->
-       ClientM (Int, ByteString, MediaType, [Header], Response ByteString)
-     )
+  :: Client m RawM :~: ((Request -> Request) -> m Response)
 checkRawMClient = Refl
 
 instanceTests :: TestTree
@@ -118,9 +112,12 @@ fileServer = do
   serveDirectoryWebApp path
 
 app :: Application
-app = serve (Proxy :: Proxy Api) $ enter (NT trans) server
+app =
+  let proxy = Proxy :: Proxy Api
+  in
+  serve proxy $ hoistServer proxy trans server
   where
-    trans :: ReaderT FilePath IO a -> Handler a
+    trans :: forall a. ReaderT FilePath IO a -> Handler a
     trans readerT = liftIO $ runReaderT readerT "example/files"
 
 serverTestsIO :: IO TestTree
@@ -137,21 +134,21 @@ serverTestsIO =
 --------------------------------
 
 getFile'
-  :: Method
-  -> (Req -> Req)
-  -> ClientM (Int, ByteString, MediaType, [Header], Response ByteString)
+  :: (Request -> Request)
+  -> ClientM Response
 getFile' = client (Proxy :: Proxy Api)
 
-getFile :: String -> ClientM ByteString
+getFile :: Text -> ClientM ByteString
 getFile filePath = do
-  (_, _, _, _, resp) <- getFile' methodGet $ \req -> appendToPath filePath req
+  resp <-
+    getFile' $ \req -> appendToPath filePath req { requestMethod = methodGet }
   pure $ responseBody resp
 
 clientTestsIO :: IO TestTree
 clientTestsIO = do
   manager <- newManager defaultManagerSettings
   baseUrl <- parseBaseUrl $ "http://localhost:" <> show port <> "/"
-  let clientEnv = ClientEnv manager baseUrl
+  let clientEnv = mkClientEnv manager baseUrl
   testSpec "client" . beforeAll runServer . afterAll killServer $ do
     it "correctly gets files" $ \_ -> do
       eitherRes <- runClientM (getFile "bar.txt") clientEnv

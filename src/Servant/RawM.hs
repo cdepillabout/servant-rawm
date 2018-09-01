@@ -29,12 +29,15 @@ What does this look like in practice?  The following is an example of using
     filePath <- 'Control.Monad.Reader.ask'
     'serveDirectoryWebApp' filePath
 
+  apiProxy :: 'Data.Proxy.Proxy' Api
+  apiProxy = 'Data.Proxy.Proxy'
+
   app :: FilePath -> 'Network.Wai.Application'
   app filePath =
-    'Servant.Server.serve' ('Data.Proxy.Proxy' :: 'Data.Proxy.Proxy' Api) apiServer
+    'Servant.Server.serve' apiProxy apiServer
     where
-      apiServer :: Server Api
-      apiServer = 'Servant.Utils.Enter.enter' ('Servant.Utils.Enter.NT' transformation) serverRoot
+      apiServer :: 'Servant.Server.Server' Api
+      apiServer = 'Servant.Server.hoistServer' apiProxy transformation serverRoot
 
       transformation :: 'Control.Monad.Reader.ReaderT' 'FilePath' 'IO' a -> 'Servant.Server.Handler' a
       transformation readerT = 'Control.Monad.IO.Class.liftIO' $ 'Control.Monad.Reader.runReaderT' readerT filePath

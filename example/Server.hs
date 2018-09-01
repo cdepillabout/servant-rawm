@@ -8,8 +8,7 @@ import Data.Monoid ((<>))
 import Data.Proxy (Proxy(Proxy))
 import Network.Wai (Application)
 import Network.Wai.Handler.Warp (run)
-import Servant (Handler, (:<|>)((:<|>)), Server, ServerT, serve)
-import Servant.Utils.Enter ((:~>)(NT), enter)
+import Servant (Handler, (:<|>)((:<|>)), Server, ServerT, hoistServer, serve)
 
 import Servant.RawM (serveDirectoryWebApp)
 
@@ -42,14 +41,14 @@ getOtherEndpoint2 = do
   (Config _ int2 _) <- ask
   pure int2
 
+apiProxy :: Proxy Api
+apiProxy = Proxy
+
 app :: Config -> Application
-app conf = serve (Proxy :: Proxy Api) apiServer
+app conf = serve apiProxy apiServer
   where
     apiServer :: Server Api
-    apiServer = enter naturalTrans serverRoot
-
-    naturalTrans :: ReaderT Config IO :~> Handler
-    naturalTrans = NT transformation
+    apiServer = hoistServer apiProxy transformation serverRoot
 
     transformation :: ReaderT Config IO a -> Handler a
     transformation readerT = liftIO $ runReaderT readerT conf

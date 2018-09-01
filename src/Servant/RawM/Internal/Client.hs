@@ -1,6 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
@@ -20,7 +21,7 @@ This module only exports a 'HasClient' instance for 'RawM'.
 module Servant.RawM.Internal.Client where
 
 import Data.Proxy (Proxy(Proxy))
-import Servant.Client (Client, ClientM, HasClient(clientWithRoute))
+import Servant.Client (Client, HasClient(clientWithRoute, hoistClientMonad))
 import Servant.Client.Core (runRequest, RunClient, Request, Response)
 import Servant.RawM.Internal.API (RawM')
 
@@ -28,7 +29,7 @@ import Servant.RawM.Internal.API (RawM')
 --
 -- >>> :set -XTypeOperators
 -- >>> import Data.Type.Equality ((:~:)(Refl))
--- >>> Refl :: Client (RawM' a) :~: (Method -> (Request -> Request) -> ClientM (Int, ByteString, MediaType, [Header], Response ByteString))
+-- >>> Refl :: Client m (RawM' a) :~: ((Request -> Request) -> m Response)
 -- Refl
 --
 -- This allows modification of the underlying 'Request' to work for any sort of
@@ -39,15 +40,19 @@ import Servant.RawM.Internal.API (RawM')
 -- the source code repository that shows a more in-depth server, client, and
 -- documentation.
 instance RunClient m => HasClient m (RawM' serverType) where
-  type Client m (RawM' serverType) = (Request -> Request) -> ClientM Response
+  type Client m (RawM' serverType) = (Request -> Request) -> m Response
 
   clientWithRoute
     :: Proxy m
-      -> Proxy (RawM' serverType)
-      -> Request
-      -> (Request -> Request)
-      -> ClientM Response
+    -> Proxy (RawM' serverType)
+    -> Request
+    -> Client m (RawM' serverType)
+  clientWithRoute Proxy Proxy req reqFunc = runRequest $ reqFunc req
 
-  clientWithRoute Proxy Proxy r f = runRequest (f r)
-
-  -- hoistClientMethod = undefined
+  hoistClientMonad
+    :: Proxy m
+    -> Proxy (RawM' serverType)
+    -> (forall x. mon x -> mon' x)
+    -> Client mon (RawM' serverType)
+    -> Client mon' (RawM' serverType)
+  hoistClientMonad Proxy Proxy f cl = \meth -> f (cl meth)
