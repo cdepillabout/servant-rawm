@@ -132,13 +132,13 @@ matrix:
   #  compiler: ": #stack 8.0.1 osx"
   #  os: osx
 
-  - env: BUILD=stack ARGS="--resolver lts-9"
-    compiler: ": #stack 8.0.2 osx"
-    os: osx
+  # - env: BUILD=stack ARGS="--resolver lts-9"
+  #   compiler: ": #stack 8.0.2 osx"
+  #   os: osx
 
-  - env: BUILD=stack ARGS="--resolver lts-11"
-    compiler: ": #stack 8.2.2 osx"
-    os: osx
+  # - env: BUILD=stack ARGS="--resolver lts-11"
+  #   compiler: ": #stack 8.2.2 osx"
+  #   os: osx
 
   - env: BUILD=stack ARGS="--resolver lts-12"
     compiler: ": #stack 8.4.3 osx"
