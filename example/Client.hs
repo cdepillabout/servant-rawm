@@ -6,14 +6,14 @@ import Data.ByteString.Lazy (ByteString)
 import qualified Data.ByteString.Lazy as LBS
 import Data.Monoid ((<>))
 import Data.Proxy (Proxy(Proxy))
-import Network.HTTP.Client (Response, defaultManagerSettings, newManager, responseBody)
-import Network.HTTP.Media (MediaType)
-import Network.HTTP.Types (Header, Method, methodGet)
+import Data.Text (Text)
+import Network.HTTP.Client (defaultManagerSettings, newManager)
+import Network.HTTP.Types (methodGet)
 import Servant.API ((:<|>)((:<|>)))
 import Servant.Client
-       (BaseUrl(BaseUrl), ClientEnv(ClientEnv), ClientM, Scheme(Http),
-        client, runClientM)
-import Servant.Common.Req (Req, appendToPath)
+       (BaseUrl(BaseUrl), ClientM, Response, Scheme(Http),
+        client, mkClientEnv, responseBody, runClientM)
+import Servant.Client.Core (Request, appendToPath, requestMethod)
 import Servant.RawM ()
 
 import Api (Api, port)
@@ -23,14 +23,16 @@ import Api (Api, port)
 -----------------------------------------
 
 otherEndpoint1 :: ClientM Int
-getFile' :: Method -> (Req -> Req) -> ClientM (Int, ByteString, MediaType, [Header], Response ByteString)
+getFile' :: (Request -> Request) -> ClientM Response
 otherEndpoint2 :: ClientM Int
 otherEndpoint1 :<|> getFile' :<|> otherEndpoint2 = client (Proxy :: Proxy Api)
 
-getFile :: String -> ClientM ByteString
+getFile :: Text -> ClientM ByteString
 getFile filePath = do
-  (_, _, _, _, resp) <- getFile' methodGet $ \req -> appendToPath filePath req
+  resp <-
+    getFile' $ \req -> appendToPath filePath req { requestMethod = methodGet }
   pure $ responseBody resp
+
 
 ----------
 -- Main --
@@ -39,7 +41,7 @@ getFile filePath = do
 main :: IO ()
 main = do
   manager <- newManager defaultManagerSettings
-  let clientEnv = ClientEnv manager baseUrl
+  let clientEnv = mkClientEnv manager baseUrl
   eitherRes <- runClientM (getFile "foo.txt") clientEnv
   case eitherRes of
     Left servantErr -> putStrLn $ "Got a ServantErr: " <> show servantErr
