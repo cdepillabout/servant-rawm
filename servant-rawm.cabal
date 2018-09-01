@@ -129,11 +129,13 @@ test-suite servant-rawm-test
                      , http-types
                      , servant
                      , servant-client
+                     , servant-client-core
                      , servant-rawm
                      , servant-server
                      , tasty
                      , tasty-hspec
                      , tasty-hunit
+                     , text
                      , transformers
                      , wai
                      , warp
