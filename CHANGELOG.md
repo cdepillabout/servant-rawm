@@ -1,4 +1,9 @@
 
+## 0.3.0.0
+
+* Update to work with the latest version of Servant (0.14) and remove support from older versions of Servant.
+* Remove support from Stackage LTS versions older than 12.
+
 ## 0.2.0.2
 
 *   Add missing test file to extra-source-files in the cabal file.
