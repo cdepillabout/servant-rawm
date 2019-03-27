@@ -33,8 +33,7 @@ import Network.Wai.Application.Static
         embeddedSettings, staticApp, webAppSettingsWithLookup)
 import Servant (Context, HasServer(route, hoistServerWithContext), Handler, ServerT, runHandler)
 import Servant.Server.Internal
-       (Delayed, Router'(RawRouter), RouteResult(Fail, FailFatal, Route), responseServantErr,
-        runDelayed)
+       (Delayed, Router'(RawRouter), RouteResult(Fail, FailFatal, Route), responseServerError, runDelayed)
 import System.FilePath (addTrailingPathSeparator)
 import WaiAppStatic.Storage.Filesystem (ETagLookup)
 
@@ -72,7 +71,7 @@ instance HasServer (RawM' serverType) context where
               (Route handlerApp) -> do
                 eitherApp <- runHandler handlerApp
                 case eitherApp of
-                  Left err -> respond . Route $ responseServantErr err
+                  Left err -> respond . Route $ responseServerError err
                   Right app -> app request (respond . Route)
   hoistServerWithContext
     :: Proxy (RawM' serverType)

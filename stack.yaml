@@ -1,7 +1,9 @@
 # For more information, see: http://docs.haskellstack.org/en/stable/yaml_configuration.html
 
 # Specifies the GHC version and set of packages available (e.g., lts-3.5, nightly-2015-09-21, ghc-7.10.2)
-resolver: lts-12.7
+# nightly is used for the servant-0.16 dependencies.  When lts-14 is released, this can be updated to
+# use that.
+resolver: nightly-2019-03-27
 
 # Local packages, usually specified by relative directory name
 packages:
@@ -39,3 +41,7 @@ extra-package-dbs: []
 # This has been disabled because of the following exchange:
 # https://github.com/cdepillabout/pretty-simple/pull/1#issuecomment-272706215
 #pvp-bounds: both
+
+nix:
+  packages:
+    - zlib
