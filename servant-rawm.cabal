@@ -134,7 +134,7 @@ test-suite servant-rawm-test
                      , servant-rawm
                      , servant-server
                      , tasty
-                     , tasty-hspec
+                     , tasty-hspec >= 0.2
                      , tasty-hunit
                      , text
                      , transformers
