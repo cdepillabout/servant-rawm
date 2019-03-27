@@ -1,4 +1,10 @@
 
+## 0.3.1.0
+
+* Update to work with servant-0.16
+  [#10](https://github.com/cdepillabout/servant-rawm/pull/10). Thanks
+  [@vlatkoB](https://github.com/vlatkoB)!
+
 ## 0.3.0.0
 
 * Update to work with the latest version of Servant (0.14) and remove support from older versions of Servant.
