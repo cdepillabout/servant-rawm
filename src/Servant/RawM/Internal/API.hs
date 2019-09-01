@@ -1,3 +1,5 @@
+{-# LANGUAGE TypeFamilies #-}
+
 {- |
 Module      :  Servant.RawM.Internal.API
 
@@ -11,6 +13,7 @@ Maintainer  :  Dennis Gosnell (cdep.illabout@gmail.com)
 module Servant.RawM.Internal.API where
 
 import Data.Typeable (Typeable)
+import Servant (HasLink, MkLink, toLink)
 
 -- | Specialization of 'RawM'' to 'FileServer'. This can be used if you are
 -- using 'Servant.RawM.serveDirectoryWebApp',
@@ -30,6 +33,10 @@ type RawM = RawM' FileServer
 -- 'FileServer'@. This allows the end-user to easily create a
 -- 'Servant.Docs.HasDocs' instance for a custom 'Network.Wai.Application'.
 data RawM' serverType deriving Typeable
+
+instance HasLink (RawM' st) where
+  type MkLink (RawM' st) a = a
+  toLink toA _ = toA
 
 -- | Used by 'RawM' as a phantom type.
 data FileServer deriving Typeable
