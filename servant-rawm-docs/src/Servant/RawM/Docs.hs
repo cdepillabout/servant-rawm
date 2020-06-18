@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP                       #-}
 {-# LANGUAGE InstanceSigs              #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
 {-# LANGUAGE OverloadedStrings         #-}
@@ -19,11 +20,14 @@ This module exports a 'HasDocs' instance for 'RawM'.
 
 module Servant.RawM.Docs () where
 
+-- Semigroup is in Prelude since 4.11.0
+#if !MIN_VERSION_base(4,11,0)
+import Data.Semigroup ((<>))
+#endif
+
 import Control.Lens       ((.~), (<>~))
 import Data.Function      ((&))
 import Data.Proxy         (Proxy (Proxy))
-
-import Data.Semigroup     ((<>))
 import Network.HTTP.Media ((//))
 import Network.HTTP.Types (methodGet)
 import Servant.Docs       (API, Action, DocCapture (DocCapture),
