@@ -1,0 +1,34 @@
+name:                servant-rawm-server
+version:             0.4.0.0
+synopsis:            The server component of "servant-rawm".
+description:         Please see <https://github.com/cdepillabout/servant-rawm#readme README.md>.
+homepage:            https://github.com/cdepillabout/servant-rawm
+license:             BSD3
+license-file:        LICENSE
+author:              Dennis Gosnell
+maintainer:          cdep.illabout@gmail.com
+copyright:           2017 Dennis Gosnell
+category:            Servant
+                   , Web
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+                   , README.md
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Servant.RawM.Server
+  build-depends:       base >= 4.8 && < 5
+                     , bytestring >= 0.10
+                     , filepath >= 1.4
+                     , servant-rawm-api
+                     , servant-server >= 0.16
+                     , resourcet >= 1.0
+                     , wai >= 3.2
+                     , wai-app-static >= 3.1
+  default-language:    Haskell2010
+  ghc-options:         -Wall -fwarn-incomplete-uni-patterns -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction -Wmissing-import-lists
+
+source-repository head
+  type:     git
+  location: git@github.com:cdepillabout/servant-rawm.git
