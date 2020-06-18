@@ -18,7 +18,7 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Servant.RawM.Docs
-  build-depends:       base >= 4.8 && < 5
+  build-depends:       base >= 4.9 && < 5
                      , servant-rawm-api
                      , servant-docs >= 0.11.3
                      , lens >= 4.0
