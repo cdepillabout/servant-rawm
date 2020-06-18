@@ -1,9 +1,15 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeOperators #-}
 
 module Main where
+
+-- Semigroup is in Prelude since 4.11.0
+#if !MIN_VERSION_base(4,11,0)
+import Data.Semigroup ((<>))
+#endif
 
 import Control.Concurrent
        (ThreadId, forkIO, killThread, threadDelay)
@@ -12,7 +18,6 @@ import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Trans.Reader (ReaderT, ask, runReaderT)
 import Data.ByteString.Lazy (ByteString)
 import Data.Either (isLeft)
-import Data.Monoid ((<>))
 import Data.Proxy (Proxy(Proxy))
 import Data.Text (Text)
 import Data.Type.Equality ((:~:)(Refl))
