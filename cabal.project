@@ -1,0 +1,6 @@
+packages:
+  *.cabal
+  servant-rawm-api/*.cabal
+  servant-rawm-client/*.cabal
+  servant-rawm-docs/*.cabal
+  servant-rawm-server/*.cabal

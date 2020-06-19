@@ -1,6 +1,6 @@
 ## 0.4.0.0
 
-* Move the API component of `servant-rawm` to a separate package `servant-rawm-api` to avoid introducing unnecessary dependencies.
+* Move the server component of `servant-rawm` to a separate package `servant-rawm-server` to avoid introducing unnecessary dependencies.
 
 ## 0.3.2.0
 

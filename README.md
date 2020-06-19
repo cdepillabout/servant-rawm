@@ -1,4 +1,3 @@
-
 # Servant.RawM
 
 [![Build Status](https://secure.travis-ci.org/cdepillabout/servant-rawm.svg)](http://travis-ci.org/cdepillabout/servant-rawm)
@@ -18,6 +17,11 @@ See the
 for an explanation of how to use the
 [`RawM`](https://hackage.haskell.org/package/servant-rawm/docs/Servant-RawM.html#t:RawM)
 type.
+
+After `servant-rawm` 0.4.0.0, it is recommended to import sub-packages
+`servant-rawm-api`, `servant-rawm-server`, `servant-rawm-client`, and
+`servant-rawm-docs` instead of `servant-rawm` to avoid pulling in unnecessary
+dependencies. This can reduce the compilation time dramatically.
 
 ## Example
 
@@ -53,7 +57,7 @@ This is an example text file.
 
 ### Client
 
-After building, the client can be run like the following:
+After building and running the server, the client can be run like the following:
 
 ```sh
 $ stack exec -- servant-rawm-example-client
