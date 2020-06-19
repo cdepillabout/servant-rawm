@@ -21,6 +21,9 @@ functions for serving directories of files.
 -}
 
 module Servant.RawM.Server (
+  -- * Reexport RawM API
+  module Servant.RawM.API,
+  -- * Helper functions for writing simple file servers
   serveDirectoryWebApp,
   serveDirectoryFileServer,
   serveDirectoryWebAppLookup,

@@ -2,19 +2,19 @@
 
 module Main where
 
-import Data.ByteString.Lazy (ByteString)
 import qualified Data.ByteString.Lazy as LBS
-import Data.Monoid ((<>))
-import Data.Proxy (Proxy(Proxy))
-import Data.Text (Text)
-import Network.HTTP.Client (defaultManagerSettings, newManager)
-import Network.HTTP.Types (methodGet)
-import Servant.API ((:<|>)((:<|>)))
-import Servant.Client
-       (BaseUrl(BaseUrl), ClientM, Response, Scheme(Http),
-        client, mkClientEnv, responseBody, runClientM)
-import Servant.Client.Core (Request, appendToPath, requestMethod)
-import Servant.RawM ()
+
+import Data.ByteString.Lazy (ByteString)
+import Data.Proxy           (Proxy (Proxy))
+import Data.Text            (Text)
+import Network.HTTP.Client  (defaultManagerSettings, newManager)
+import Network.HTTP.Types   (methodGet)
+import Servant.API          ((:<|>) ((:<|>)))
+import Servant.Client       (BaseUrl (BaseUrl), ClientM, Response,
+                             Scheme (Http), client, mkClientEnv, responseBody,
+                             runClientM)
+import Servant.Client.Core  (Request, appendToPath, requestMethod)
+import Servant.RawM.Client ()
 
 import Api (Api, port)
 

@@ -1,23 +1,21 @@
-{-# LANGUAGE TypeOperators #-}
-
 module Main where
 
-import Control.Monad.IO.Class (liftIO)
+import Control.Monad.IO.Class     (liftIO)
 import Control.Monad.Trans.Reader (ReaderT, ask, runReaderT)
-import Data.Monoid ((<>))
-import Data.Proxy (Proxy(Proxy))
-import Network.Wai (Application)
-import Network.Wai.Handler.Warp (run)
-import Servant (Handler, (:<|>)((:<|>)), Server, ServerT, hoistServer, serve)
+import Data.Proxy                 (Proxy (Proxy))
+import Network.Wai                (Application)
+import Network.Wai.Handler.Warp   (run)
+import Servant                    ((:<|>) ((:<|>)), Handler, Server, ServerT,
+                                   hoistServer, serve)
 
-import Servant.RawM (serveDirectoryWebApp)
+import Servant.RawM.Server (serveDirectoryWebApp)
 
 import Api (Api, port)
 
 data Config = Config
   { configInt1 :: Int
   , configInt2 :: Int
-  , configDir :: FilePath
+  , configDir  :: FilePath
   } deriving Show
 
 config :: Config

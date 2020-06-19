@@ -18,7 +18,10 @@ Portability :  unknown
 This module exports a 'HasDocs' instance for 'RawM'.
 -}
 
-module Servant.RawM.Docs () where
+module Servant.RawM.Docs (
+  -- * Reexport RawM API
+  module Servant.RawM.API
+) where
 
 -- Semigroup is in Prelude since 4.11.0
 #if !MIN_VERSION_base(4,11,0)

@@ -5,7 +5,7 @@ module Api where
 
 import Servant.API (Get, JSON, (:>), (:<|>))
 
-import Servant.RawM (RawM)
+import Servant.RawM.API (RawM)
 
 type Api = OtherEndpoint1 :<|> RawEndpoint :<|> OtherEndpoint2
 

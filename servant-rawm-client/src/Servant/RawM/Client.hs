@@ -18,7 +18,10 @@ Portability :  unknown
 This module only exports a 'HasClient' instance for 'RawM'.
 -}
 
-module Servant.RawM.Client () where
+module Servant.RawM.Client (
+  -- * Reexport RawM API
+  module Servant.RawM.API
+) where
 
 import Data.Proxy          (Proxy (Proxy))
 import Servant.Client.Core (Client,

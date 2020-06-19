@@ -84,7 +84,7 @@ module Servant.RawM
   , serveDirectoryWith
   ) where
 
-import Servant.RawM.Server
+import Servant.RawM.API
 import Servant.RawM.Client ()
 import Servant.RawM.Docs ()
-import Servant.RawM.API
+import Servant.RawM.Server
