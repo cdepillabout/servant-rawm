@@ -48,7 +48,7 @@ instance (HasDocs serverType) => HasDocs (RawM' serverType) where
     docsFor (Proxy :: Proxy serverType) (endpoint, action) docOpts
 
 -- | This is a 'HasDocs' instance compatible with the file servers defined in
--- "Servant.RawM.Internal.Server".
+-- "Servant.RawM.Server".
 instance HasDocs FileServer where
   docsFor :: Proxy FileServer -> (Endpoint, Action) -> DocOptions -> API
   docsFor Proxy (endpoint, action) _ =
