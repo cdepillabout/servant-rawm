@@ -4,10 +4,12 @@ synopsis:            Embed a raw 'Application' in a Servant API
 description:
   Please see <https://github.com/cdepillabout/servant-rawm#readme README.md>.
   .
-  After @servant-rawm@ 0.4.0.0, it is recommended to import sub-packages
-  @servant-rawm-api@, @servant-rawm-server@, @servant-rawm-client@, and
-  @servant-rawm-docs@ instead of this package to avoid pulling in unnecessary
-  dependencies. This can reduce the compilation time dramatically.
+  After @servant-rawm@ 0.4.0.0, the implementation are divided into
+  three packages: @servant-rawm-server@, @servant-rawm-client@,
+  and @servant-rawm-docs@.
+  .
+  You need to use either of the three implementations for the 'RawM' endpoint
+  to function correctly.
 homepage:            https://github.com/cdepillabout/servant-rawm
 license:             BSD3
 license-file:        LICENSE
@@ -31,11 +33,8 @@ flag buildexample
 library
   hs-source-dirs:      src
   exposed-modules:     Servant.RawM
-  build-depends:       base >= 4.9 && < 5
-                     , servant-rawm-api
-                     , servant-rawm-client
-                     , servant-rawm-docs
-                     , servant-rawm-server
+  build-depends:       base >= 4.8 && < 5
+                     , servant >= 0.16
   default-language:    Haskell2010
   ghc-options:         -Wall -fwarn-incomplete-uni-patterns -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction -Wmissing-import-lists
 
@@ -49,7 +48,7 @@ executable servant-rawm-example-client
                      , http-media
                      , http-types
                      , servant
-                     , servant-rawm-api
+                     , servant-rawm
                      , servant-rawm-client
                      , servant-client
                      , servant-client-core
@@ -68,7 +67,7 @@ executable servant-rawm-example-docs
   hs-source-dirs:      example
   build-depends:       base >= 4.11 && < 5
                      , servant
-                     , servant-rawm-api
+                     , servant-rawm
                      , servant-rawm-docs
                      , servant-docs
                      , text
@@ -86,7 +85,7 @@ executable servant-rawm-example-server
   hs-source-dirs:      example
   build-depends:       base >= 4.11 && < 5
                      , servant
-                     , servant-rawm-api
+                     , servant-rawm
                      , servant-rawm-server
                      , servant-server
                      , transformers
@@ -128,6 +127,8 @@ test-suite servant-rawm-test
                      , servant-client-core
                      , servant-docs
                      , servant-rawm
+                     , servant-rawm-client
+                     , servant-rawm-server
                      , lens
                      , servant-server
                      , tasty

@@ -18,10 +18,15 @@ for an explanation of how to use the
 [`RawM`](https://hackage.haskell.org/package/servant-rawm/docs/Servant-RawM.html#t:RawM)
 type.
 
-After `servant-rawm` 0.4.0.0, it is recommended to import sub-packages
-`servant-rawm-api`, `servant-rawm-server`, `servant-rawm-client`, and
-`servant-rawm-docs` instead of `servant-rawm` to avoid pulling in unnecessary
-dependencies. This can reduce the compilation time dramatically.
+After `servant-rawm` 0.4.0.0, the implementations of the `RawM` endpoint are
+divided into `servant-rawm-client`, `servant-rawm-docs`, and
+`servant-rawm-server` to avoid introducing unnecessary dependencies and reduce
+the compilation overhead.
+
+You will need to add either of the implementations to your dependencies, and
+import the corresponding implementation (`Servant.RawM.Server`,
+`Servant.RawM.Client`, or `Servant.RawM.Docs`) for the `RawM` endpoint to
+function correctly.
 
 ## Example
 

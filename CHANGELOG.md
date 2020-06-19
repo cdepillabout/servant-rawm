@@ -1,6 +1,6 @@
 ## 0.4.0.0
 
-* Separate `servant-rawm` into four sub-packages `servant-rawm-api`, `servant-rawm-client`, `servant-rawm-docs`, and `servant-rawm-server` to avoid introducing unnecessary dependencies. It is recommended to use the sub-packages instead of `servant-rawm` to reduce compilation time.
+* The implementations of the `RawM` endpoint are divided into `servant-rawm-client`, `servant-rawm-docs`, and `servant-rawm-server` to avoid introducing unnecessary dependencies and reduce the compilation overhead. You will need to add either of the implementations to your dependencies, and import the corresponding implementation (`Servant.RawM.Server`, `Servant.RawM.Client`, or `Servant.RawM.Docs`) for the `RawM` endpoint to function correctly.
 
 ## 0.3.2.0
 

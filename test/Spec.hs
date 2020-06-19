@@ -35,7 +35,8 @@ import Test.Tasty (TestTree, defaultMain, testGroup)
 import Test.Tasty.Hspec (afterAll, beforeAll, it, shouldBe, testSpec)
 import Test.Tasty.HUnit ((@?=), assertFailure, testCase)
 
-import Servant.RawM (RawM, serveDirectoryWebApp)
+import Servant.RawM.Server (RawM, serveDirectoryWebApp)
+import Servant.RawM.Client ()
 
 main :: IO ()
 main = do

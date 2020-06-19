@@ -19,7 +19,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Servant.RawM.Docs
   build-depends:       base >= 4.9 && < 5
-                     , servant-rawm-api
+                     , servant-rawm
                      , servant-docs >= 0.11.3
                      , lens >= 4.0
                      , http-media >= 0.6

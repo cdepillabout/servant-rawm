@@ -17,12 +17,13 @@ Stability   :  experimental
 Portability :  unknown
 
 This module exports 'HasServer' instances for 'RawM'', as well as some helper
-functions for serving directories of files.
+functions for serving directories of files. It provides the server
+implementation for the 'RawM' endpoint.
 -}
 
 module Servant.RawM.Server (
   -- * Reexport RawM API
-  module Servant.RawM.API,
+  module Servant.RawM,
   -- * Helper functions for writing simple file servers
   serveDirectoryWebApp,
   serveDirectoryFileServer,
@@ -51,7 +52,7 @@ import Servant.Server.Internal         (Delayed,
 import System.FilePath                 (addTrailingPathSeparator)
 import WaiAppStatic.Storage.Filesystem (ETagLookup)
 
-import Servant.RawM.API
+import Servant.RawM
 
 -- | Creates a server instance like the following:
 --

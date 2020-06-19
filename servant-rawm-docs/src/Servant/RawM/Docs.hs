@@ -15,12 +15,13 @@ Maintainer  :  Dennis Gosnell (cdep.illabout@gmail.com)
 Stability   :  experimental
 Portability :  unknown
 
-This module exports a 'HasDocs' instance for 'RawM'.
+This module exports a 'HasDocs' instance for 'RawM', which provides
+documentations for the 'RawM' endpoint.
 -}
 
 module Servant.RawM.Docs (
   -- * Reexport RawM API
-  module Servant.RawM.API
+  module Servant.RawM
 ) where
 
 -- Semigroup is in Prelude since 4.11.0
@@ -38,7 +39,7 @@ import Servant.Docs       (API, Action, DocCapture (DocCapture),
                            HasDocs (docsFor), captures, defResponse, method,
                            notes, path, respBody, respStatus, respTypes,
                            response, single)
-import Servant.RawM.API
+import Servant.RawM
 
 -- | This just defers to the 'HasDocs' instance for the @serverType@ phantom
 -- type.

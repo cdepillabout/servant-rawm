@@ -15,19 +15,20 @@ Maintainer  :  Dennis Gosnell (cdep.illabout@gmail.com)
 Stability   :  experimental
 Portability :  unknown
 
-This module only exports a 'HasClient' instance for 'RawM'.
+This module exports a 'HasClient' instance for 'RawM', which provides the
+client implementation for the 'RawM' endpoint.
 -}
 
 module Servant.RawM.Client (
   -- * Reexport RawM API
-  module Servant.RawM.API
+  module Servant.RawM
 ) where
 
 import Data.Proxy          (Proxy (Proxy))
 import Servant.Client.Core (Client,
                             HasClient (clientWithRoute, hoistClientMonad),
                             Request, Response, RunClient, runRequest)
-import Servant.RawM.API
+import Servant.RawM
 
 -- | Creates a client route like the following:
 --
