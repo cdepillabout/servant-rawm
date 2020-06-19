@@ -126,10 +126,6 @@ test-suite servant-rawm-test
                      , servant-client
                      , servant-client-core
                      , servant-docs
-                     , servant-rawm-api
-                     , servant-rawm-client
-                     , servant-rawm-docs
-                     , servant-rawm-server
                      , servant-rawm
                      , lens
                      , servant-server
