@@ -115,7 +115,7 @@ test-suite servant-rawm-test
   main-is:             Spec.hs
   other-modules:
   hs-source-dirs:      test
-  build-depends:       base >= 4.11 && < 5
+  build-depends:       base >= 4.9 && < 5
                      , bytestring
                      , filepath
                      , hspec-wai
