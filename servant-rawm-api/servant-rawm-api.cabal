@@ -1,6 +1,6 @@
 name:                servant-rawm-api
 version:             0.4.0.0
-synopsis:            The API component of "servant-rawm".
+synopsis:            The API component of servant-rawm.
 description:         Please see <https://github.com/cdepillabout/servant-rawm#readme README.md>.
 homepage:            https://github.com/cdepillabout/servant-rawm
 license:             BSD3

@@ -1,7 +1,13 @@
 name:                servant-rawm
 version:             0.4.0.0
 synopsis:            Embed a raw 'Application' in a Servant API
-description:         Please see <https://github.com/cdepillabout/servant-rawm#readme README.md>.
+description:
+  Please see <https://github.com/cdepillabout/servant-rawm#readme README.md>.
+  .
+  After @servant-rawm@ 0.4.0.0, it is recommended to import sub-packages
+  @servant-rawm-api@, @servant-rawm-server@, @servant-rawm-client@, and
+  @servant-rawm-docs@ instead of this package to avoid pulling in unnecessary
+  dependencies. This can reduce the compilation time dramatically.
 homepage:            https://github.com/cdepillabout/servant-rawm
 license:             BSD3
 license-file:        LICENSE

@@ -1,3 +1,6 @@
+## 0.4.0.0
+
+* Separate `servant-rawm` into four sub-packages `servant-rawm-api`, `servant-rawm-client`, `servant-rawm-docs`, and `servant-rawm-server` to avoid introducing unnecessary dependencies. It is recommended to use the sub-packages instead of `servant-rawm` to reduce compilation time.
 
 ## 0.3.2.0
 
