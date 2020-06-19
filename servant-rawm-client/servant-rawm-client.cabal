@@ -22,7 +22,7 @@ library
                      , servant-rawm-api
                      , servant-client-core >= 0.16
   default-language:    Haskell2010
-  ghc-options:         -Wall -fwarn-incomplete-uni-patterns -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction -Wmissing-import-lists
+  ghc-options:         -Wall -fwarn-incomplete-uni-patterns -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction
 
 source-repository head
   type:     git

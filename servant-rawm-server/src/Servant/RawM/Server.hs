@@ -51,7 +51,7 @@ import Servant.Server.Internal         (Delayed,
 import System.FilePath                 (addTrailingPathSeparator)
 import WaiAppStatic.Storage.Filesystem (ETagLookup)
 
-import Servant.RawM.API (RawM')
+import Servant.RawM.API
 
 -- | Creates a server instance like the following:
 --

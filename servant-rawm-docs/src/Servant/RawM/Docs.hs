@@ -38,7 +38,7 @@ import Servant.Docs       (API, Action, DocCapture (DocCapture),
                            HasDocs (docsFor), captures, defResponse, method,
                            notes, path, respBody, respStatus, respTypes,
                            response, single)
-import Servant.RawM.API   (FileServer, RawM')
+import Servant.RawM.API
 
 -- | This just defers to the 'HasDocs' instance for the @serverType@ phantom
 -- type.
