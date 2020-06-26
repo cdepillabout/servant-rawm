@@ -1,7 +1,7 @@
 name:                servant-rawm-examples-and-tests
 version:             0.0.0.0
-synopsis:            Embed a raw 'Application' in a Servant API
-description:         Examples and tests for servant-rawm.
+synopsis:            Examples and tests.
+description:         This package contains examples and tests for 'servant-rawm'.
 homepage:            https://github.com/cdepillabout/servant-rawm
 license:             BSD3
 license-file:        LICENSE
