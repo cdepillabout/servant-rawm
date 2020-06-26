@@ -29,7 +29,7 @@ What does this look like in practice?  The following is an example of using
   rawEndpoint :: 'Control.Monad.Reader.ReaderT' 'FilePath' 'IO' 'Network.Wai.Application'
   rawEndpoint = do
     filePath <- 'Control.Monad.Reader.ask'
-    'serveDirectoryWebApp' filePath
+    'Servant.RawM.Server.serveDirectoryWebApp' filePath
 
   apiProxy :: 'Data.Proxy.Proxy' Api
   apiProxy = 'Data.Proxy.Proxy'
@@ -51,7 +51,7 @@ the 'Control.Monad.Reader.ReaderT'. Using Servant's default
 following:
 
 @
-  type Api\' = \"serve-directory-example\" :> 'Raw'
+  type Api\' = \"serve-directory-example\" :> 'Servant.API.Raw.Raw'
 
   serverRoot\' :: 'Server.ServerT' Api\' ('Control.Monad.Reader.ReaderT' 'FilePath' 'IO')
   serverRoot\' = rawEndpoint\'
@@ -95,8 +95,8 @@ import Data.Typeable (Typeable)
 import Servant.Links (HasLink, MkLink, toLink)
 
 -- | Specialization of 'RawM'' to 'FileServer'. This can be used if you are
--- using 'Servant.RawM.serveDirectoryWebApp',
--- 'Servant.RawM.serveDirectoryFileServer', etc.
+-- using 'Servant.RawM.Server.serveDirectoryWebApp',
+-- 'Servant.RawM.Server.serveDirectoryFileServer', etc.
 type RawM = RawM' FileServer
 
 -- | This is a type to use to define a Servant API. It signifies a route that
