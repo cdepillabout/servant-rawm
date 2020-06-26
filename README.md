@@ -51,7 +51,7 @@ $ stack exec -- servant-rawm-example-server
 ```
 
 This runs a server on port 8201 serving files
-in [`example/files/`](example/files/).
+in [`servant-rawm-examples-and-tests/example/files/`](servant-rawm-examples-and-tests/example/files/).
 
 It can be accessed from `curl` like the following:
 
@@ -81,3 +81,8 @@ documentation for the API defined in
 $ stack exec -- servant-rawm-example-docs
 ...
 ```
+
+## Maintainers
+
+- [@cdepillabout](https://github.com/cdepillabout)
+- [@Krasjet](https://github.com/Krasjet)
