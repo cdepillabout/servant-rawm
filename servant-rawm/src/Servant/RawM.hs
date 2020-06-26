@@ -8,7 +8,7 @@ License     :  BSD3
 
 Maintainer  :  Dennis Gosnell (cdep.illabout@gmail.com)
 
-This module defines the types for 'RawM' type that allows you to embed a WAI
+This module defines the 'RawM' type that allows you to embed a WAI
 'Network.Wai.Application' in your Servant API.
 
 It is similar to 'Servant.API.Raw.Raw' provided by Servant, but there is one big
@@ -19,6 +19,8 @@ What does this look like in practice?  The following is an example of using
 'RawM':
 
 @
+  import "Servant.RawM.Server"
+
   type Api = \"serve-directory-example\" :> 'RawM'
 
   serverRoot :: 'Servant.Server.ServerT' Api ('Control.Monad.Reader.ReaderT' 'FilePath' 'IO')
@@ -65,14 +67,17 @@ so there is no way to get the directory path.
 produced monadically.
 
 There is an
-<https://github.com/cdepillabout/servant-rawm/tree/master/example example> in
-the source code repository that shows a more in-depth server, client, and
+<https://github.com/cdepillabout/servant-rawm/tree/master/servant-rawm-examples-and-tests/example example>
+in the source code repository that shows a more in-depth server, client, and
 documentation.
 
 After @servant-rawm@ 1.0.0.0, the implementations for 'RawM' server, client,
 and documentation generator are divided into three packages:
-@servant-rawm-server@, @servant-rawm-client@, and @servant-rawm-docs@ to avoid
-pulling in unnecessary dependencies. This module is re-exported in
+<https://hackage.haskell.org/package/servant-rawm-server servant-rawm-server>,
+<https://hackage.haskell.org/package/servant-rawm-client servant-rawm-client>,
+and
+<https://hackage.haskell.org/package/servant-rawm-client servant-rawm-docs>
+to avoid pulling in unnecessary dependencies. This module is re-exported in
 "Servant.RawM.Server", "Servant.RawM.Client", and "Servant.RawM.Docs", so you
 don't need to import this module explicitly. Import the corresponding
 implementation instead.
