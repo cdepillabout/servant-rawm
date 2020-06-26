@@ -69,7 +69,7 @@ There is an
 the source code repository that shows a more in-depth server, client, and
 documentation.
 
-After @servant-rawm@ 0.4.0.0, the implementations for 'RawM' server, client,
+After @servant-rawm@ 1.0.0.0, the implementations for 'RawM' server, client,
 and documentation generator are divided into three packages:
 @servant-rawm-server@, @servant-rawm-client@, and @servant-rawm-docs@ to avoid
 pulling in unnecessary dependencies. This module is re-exported in

@@ -18,7 +18,7 @@ for an explanation of how to use the
 [`RawM`](https://hackage.haskell.org/package/servant-rawm/docs/Servant-RawM.html#t:RawM)
 type.
 
-After `servant-rawm` 0.4.0.0, the implementations of the `RawM` endpoint are
+After `servant-rawm` 1.0.0.0, the implementations of the `RawM` endpoint are
 divided into `servant-rawm-client`, `servant-rawm-docs`, and
 `servant-rawm-server` to avoid introducing unnecessary dependencies and reduce
 the compilation overhead.

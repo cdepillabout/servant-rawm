@@ -1,5 +1,5 @@
 name:                servant-rawm
-version:             0.4.0.0
+version:             1.0.0.0
 synopsis:            Embed a raw 'Application' in a Servant API
 description:
   Please see <https://github.com/cdepillabout/servant-rawm#readme README.md>.

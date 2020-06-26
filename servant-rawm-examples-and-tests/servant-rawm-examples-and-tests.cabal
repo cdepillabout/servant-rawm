@@ -1,15 +1,7 @@
 name:                servant-rawm-examples-and-tests
 version:             0.0.0.0
 synopsis:            Embed a raw 'Application' in a Servant API
-description:
-  Please see <https://github.com/cdepillabout/servant-rawm#readme README.md>.
-  .
-  After @servant-rawm@ 0.4.0.0, the implementation are divided into
-  three packages: @servant-rawm-server@, @servant-rawm-client@,
-  and @servant-rawm-docs@.
-  .
-  You need to use either of the three implementations for the 'RawM' endpoint
-  to function correctly.
+description:         Examples and tests for servant-rawm.
 homepage:            https://github.com/cdepillabout/servant-rawm
 license:             BSD3
 license-file:        LICENSE
