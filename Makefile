@@ -4,9 +4,6 @@ all: build
 build:
 	stack build
 
-build-example:
-	stack build --flag servant-rawm:buildexample
-
 clean:
 	stack clean
 
@@ -56,9 +53,6 @@ upload:
 # Watch for changes.
 watch:
 	stack build --file-watch --fast .
-
-watch-example:
-	stack build --file-watch --fast --flag servant-rawm:buildexample .
 
 watch-haddock:
 	stack build --haddock --file-watch --fast .
