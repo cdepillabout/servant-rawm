@@ -23,7 +23,6 @@ extra-source-files:  CHANGELOG.md
                    , README.md
                    , example/files/bar.txt
                    , example/files/foo.txt
-                   , stack.yaml
 cabal-version:       >=1.10
 
 flag buildexample
