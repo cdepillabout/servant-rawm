@@ -10,6 +10,7 @@ packages:
 - 'servant-rawm'
 - 'servant-rawm-client'
 - 'servant-rawm-docs'
+- 'servant-rawm-examples-and-tests'
 - 'servant-rawm-server'
 
 # Packages to be pulled from upstream that are not in the resolver (e.g., acme-missiles-0.3)
