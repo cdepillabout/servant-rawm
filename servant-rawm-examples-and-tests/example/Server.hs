@@ -19,7 +19,7 @@ data Config = Config
   } deriving Show
 
 config :: Config
-config = Config {configInt1 = 3, configInt2 = 4, configDir = "./example/files"}
+config = Config {configInt1 = 3, configInt2 = 4, configDir = "./servant-rawm-examples-and-tests/example/files"}
 
 serverRoot :: ServerT Api (ReaderT Config IO)
 serverRoot = getOtherEndpoint1 :<|> rawEndpoint :<|> getOtherEndpoint2

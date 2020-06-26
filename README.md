@@ -31,7 +31,7 @@ function correctly.
 ## Example
 
 There is code for an example server, client, and documentation located
-in [`example/`](example/). The following section describes how to run the
+in [`servant-rawm-examples-and-tests/example/`](servant-rawm-examples-and-tests/example/). The following section describes how to run the
 example executables.
 
 ### Building
@@ -39,7 +39,7 @@ example executables.
 The example executables can be built with the following command:
 
 ```sh
-$ stack build --flag servant-rawm:buildexample
+$ stack build servant-rawm-examples-and-tests
 ```
 
 ### Server
@@ -74,7 +74,8 @@ This is an example text file.
 ### Documentation
 
 After building, the documentation can be generated like the following. This is
-documentation for the API defined in [example/Api.hs](example/Api.hs):
+documentation for the API defined in
+[servant-rawm-examples-and-tests/example/Api.hs](servant-rawm-examples-and-tests/example/Api.hs):
 
 ```sh
 $ stack exec -- servant-rawm-example-docs

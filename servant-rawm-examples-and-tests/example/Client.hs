@@ -46,7 +46,7 @@ main = do
   case eitherRes of
     Left servantErr -> putStrLn $ "Got a ServantErr: " <> show servantErr
     Right fileContents -> do
-      putStrLn "Successfully got file ./example/files/foo.txt:\n"
+      putStrLn "Successfully got file ./servant-rawm-examples-and-tests/example/files/foo.txt:\n"
       LBS.putStr fileContents
 
 baseUrl :: BaseUrl
