@@ -24,16 +24,18 @@ library
   default-language:    Haskell2010
   ghc-options:         -Wall -fwarn-incomplete-uni-patterns -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction
 
-test-suite servant-rawm-client-doctest
-  type:                exitcode-stdio-1.0
-  main-is:             DocTest.hs
-  hs-source-dirs:      test
-  build-depends:       base
-                     , doctest
-                     , Glob
-                     , servant-client-core
-  default-language:    Haskell2010
-  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+-- TODO: These doctests need to be moved to cabal-doctest, since just using
+-- doctest directly is not reliable.
+-- test-suite servant-rawm-client-doctest
+--   type:                exitcode-stdio-1.0
+--   main-is:             DocTest.hs
+--   hs-source-dirs:      test
+--   build-depends:       base
+--                      , doctest
+--                      , Glob
+--                      , servant-client-core
+--   default-language:    Haskell2010
+--   ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
 
 source-repository head
   type:     git
