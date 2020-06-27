@@ -61,4 +61,4 @@ instance RunClient m => HasClient m (RawM' serverType) where
     -> (forall x. mon x -> mon' x)
     -> Client mon (RawM' serverType)
     -> Client mon' (RawM' serverType)
-  hoistClientMonad Proxy Proxy f cl = \meth -> f (cl meth)
+  hoistClientMonad Proxy Proxy f cl = f . cl

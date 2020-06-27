@@ -37,7 +37,7 @@ test:
 
 # Run hlint.
 lint:
-	hlint src/
+	hlint **/src/
 
 # This runs a small python websever on port 8001 serving up haddocks for
 # packages you have installed.
