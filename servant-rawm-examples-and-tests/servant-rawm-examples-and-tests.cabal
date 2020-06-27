@@ -1,0 +1,100 @@
+name:                servant-rawm-examples-and-tests
+version:             0.0.0.0
+synopsis:            Examples and tests.
+description:         This package contains examples and tests for 'servant-rawm'.
+homepage:            https://github.com/cdepillabout/servant-rawm
+license:             BSD3
+license-file:        LICENSE
+author:              Dennis Gosnell
+maintainer:          cdep.illabout@gmail.com
+                   , nil.krjst@gmail.com
+copyright:           2017 Dennis Gosnell
+category:            Servant
+                   , Web
+build-type:          Simple
+extra-source-files:  example/files/bar.txt
+                   , example/files/foo.txt
+cabal-version:       >=1.10
+
+executable servant-rawm-example-client
+  main-is:             Client.hs
+  other-modules:       Api
+  hs-source-dirs:      example
+  build-depends:       base >= 4.11 && < 5
+                     , bytestring
+                     , http-client
+                     , http-media
+                     , http-types
+                     , servant
+                     , servant-rawm
+                     , servant-rawm-client
+                     , servant-client
+                     , servant-client-core
+                     , text
+  default-language:    Haskell2010
+  ghc-options:         -Wall -fwarn-incomplete-uni-patterns -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction -Wmissing-import-lists -threaded -rtsopts -with-rtsopts=-N
+
+executable servant-rawm-example-docs
+  main-is:             Docs.hs
+  other-modules:       Api
+  hs-source-dirs:      example
+  build-depends:       base >= 4.11 && < 5
+                     , servant
+                     , servant-rawm
+                     , servant-rawm-docs
+                     , servant-docs
+                     , text
+  default-language:    Haskell2010
+  ghc-options:         -Wall -fwarn-incomplete-uni-patterns -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction -Wmissing-import-lists -threaded -rtsopts -with-rtsopts=-N
+
+executable servant-rawm-example-server
+  main-is:             Server.hs
+  other-modules:       Api
+  hs-source-dirs:      example
+  build-depends:       base >= 4.11 && < 5
+                     , servant
+                     , servant-rawm
+                     , servant-rawm-server
+                     , servant-server
+                     , transformers
+                     , wai
+                     , warp
+  default-language:    Haskell2010
+  ghc-options:         -Wall -fwarn-incomplete-uni-patterns -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction -Wmissing-import-lists -threaded -rtsopts -with-rtsopts=-N
+
+test-suite servant-rawm-test
+  type:                exitcode-stdio-1.0
+  main-is:             Spec.hs
+  other-modules:
+  hs-source-dirs:      test
+  build-depends:       base >= 4.9 && < 5
+                     , bytestring
+                     , filepath
+                     , hspec-wai
+                     , http-client
+                     , http-media
+                     , http-types
+                     , resourcet
+                     , servant
+                     , servant-client
+                     , servant-client-core
+                     , servant-docs
+                     , servant-rawm
+                     , servant-rawm-client
+                     , servant-rawm-server
+                     , lens
+                     , servant-server
+                     , tasty
+                     , tasty-hspec >= 0.2
+                     , tasty-hunit
+                     , text
+                     , transformers
+                     , wai
+                     , wai-app-static
+                     , warp
+  default-language:    Haskell2010
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N -fwarn-incomplete-uni-patterns -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction -Wmissing-import-lists
+
+source-repository head
+  type:     git
+  location: git@github.com:cdepillabout/servant-rawm.git

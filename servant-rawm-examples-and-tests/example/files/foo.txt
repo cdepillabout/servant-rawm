@@ -1,0 +1,3 @@
+This is an example text file.
+
+The example API will serve any file in the ./servant-rawm-examples-and-tests/example/files directory.
