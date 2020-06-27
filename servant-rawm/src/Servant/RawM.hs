@@ -7,6 +7,7 @@ Copyright   :  Dennis Gosnell 2017
 License     :  BSD3
 
 Maintainer  :  Dennis Gosnell (cdep.illabout@gmail.com)
+               Krasjet (nil.krjst@gmail.com)
 
 This module defines the 'RawM' type that allows you to embed a WAI
 'Network.Wai.Application' in your Servant API.
