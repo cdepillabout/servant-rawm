@@ -1,3 +1,7 @@
+## 1.0.0.1
+
+*   Bump the version lower bound of servant-rawm to 1.0
+
 ## 1.0.0.0
 
 *   The implementations of the `RawM` endpoint are divided into

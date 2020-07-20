@@ -1,5 +1,5 @@
 name:                servant-rawm-docs
-version:             1.0.0.0
+version:             1.0.0.1
 synopsis:            Documentation generator for 'RawM' endpoints.
 description:         Please see <https://github.com/cdepillabout/servant-rawm#readme README.md>.
 homepage:            https://github.com/cdepillabout/servant-rawm
@@ -20,7 +20,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Servant.RawM.Docs
   build-depends:       base >= 4.9 && < 5
-                     , servant-rawm
+                     , servant-rawm >= 1.0
                      , servant-docs >= 0.11.3
                      , lens >= 4.0
                      , http-media >= 0.6
