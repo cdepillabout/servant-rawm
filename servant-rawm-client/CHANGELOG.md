@@ -1,3 +1,9 @@
+## 1.0.0.2
+
+*   Change imports so this works with >= 0.18.1.
+    [#20](https://github.com/cdepillabout/servant-rawm/pull/20)
+    Thanks [@jhrcek](https://github.com/jhrcek)!
+
 ## 1.0.0.1
 
 *   Bump the version lower bound of servant-rawm to 1.0
