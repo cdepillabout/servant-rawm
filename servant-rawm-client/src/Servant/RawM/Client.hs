@@ -28,7 +28,8 @@ module Servant.RawM.Client (
 import Data.Proxy          (Proxy (Proxy))
 import Servant.Client.Core (Client,
                             HasClient (clientWithRoute, hoistClientMonad),
-                            Request, Response, RunClient, runRequest)
+                            Request, Response, RunClient)
+import Servant.Client.Core.RunClient (runRequest)
 import Servant.RawM
 
 -- | Creates a client route like the following:
