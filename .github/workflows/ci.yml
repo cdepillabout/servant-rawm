@@ -49,6 +49,7 @@ jobs:
 
   stack:
     name: stack / ${{ matrix.resolver }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os:
