@@ -58,7 +58,6 @@ jobs:
         stack:
           - "latest"
         resolver:
-          - "--resolver lts-11" # GHC 8.2.2
           - "--resolver lts-12" # GHC 8.4.4
           - "--resolver lts-14" # GHC 8.6.5
           - "--resolver lts-16" # GHC 8.8.4
