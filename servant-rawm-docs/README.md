@@ -1,6 +1,6 @@
 # Servant.RawM.Docs
 
-[![Build Status](https://secure.travis-ci.org/cdepillabout/servant-rawm.svg)](http://travis-ci.org/cdepillabout/servant-rawm)
+[![CI](https://github.com/cdepillabout/servant-rawm/actions/workflows/ci.yml/badge.svg)](https://github.com/cdepillabout/servant-rawm/actions/workflows/ci.yml)
 [![Hackage](https://img.shields.io/hackage/v/servant-rawm-docs.svg)](https://hackage.haskell.org/package/servant-rawm-docs)
 [![Stackage LTS](http://stackage.org/package/servant-rawm-docs/badge/lts)](http://stackage.org/lts/package/servant-rawm-docs)
 [![Stackage Nightly](http://stackage.org/package/servant-rawm-docs/badge/nightly)](http://stackage.org/nightly/package/servant-rawm-docs)
