@@ -14,7 +14,7 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - macOS-latest
+          # - macOS-latest
         cabal: ["latest"]
         ghc:
           - "8.4.4"
@@ -48,11 +48,20 @@ jobs:
         cabal test all --enable-tests
 
   stack:
-    name: stack / ubuntu-latest
-    runs-on: ubuntu-latest
+    name: stack / ${{ matrix.resolver }} / ${{ matrix.os }}
     strategy:
       matrix:
-        stack: ["latest"]
+        os:
+          - ubuntu-latest
+          # - macOS-latest
+        stack:
+          - "latest"
+        resolver:
+          - "--resolver lts-11" # GHC 8.2.2
+          - "--resolver lts-12" # GHC 8.4.4
+          - "--resolver lts-14" # GHC 8.6.5
+          - "--resolver lts-16" # GHC 8.8.4
+          - "--stack-yaml ./stack.yaml" # LTS-17 GHC 8.10.4
 
     steps:
     - uses: actions/checkout@v2
@@ -68,11 +77,11 @@ jobs:
       name: Cache ~/.stack
       with:
         path: ~/.stack
-        key: ${{ runner.os }}-${{ matrix.ghc }}-stack
+        key: ${{ runner.os }}-${{ matrix.resolver }}-stack
 
     - name: Build
       run: |
-        stack build --test --bench --no-run-tests --no-run-benchmarks
+        stack ${{ matrix.resolver }} build --test --bench --no-run-tests --no-run-benchmarks
     - name: Test
       run: |
-        stack test --flag termonad:buildexamples
+        stack test ${{ matrix.resolver }}
